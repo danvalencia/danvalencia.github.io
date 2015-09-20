@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Devops on A Technology Journal</title>
+    <link>http://localhost:1313/tags/devops/</link>
+    <description>Recent content in Devops on A Technology Journal</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 23 Oct 2012 10:27:00 -0700</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/devops/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Notes On Continuous Delivery</title>
+      <link>http://localhost:1313/articles/notes_on_continuous_delivery/</link>
+      <pubDate>Tue, 23 Oct 2012 10:27:00 -0700</pubDate>
+      
+      <guid>http://localhost:1313/articles/notes_on_continuous_delivery/</guid>
+      <description>
+
+&lt;h3 id=&#34;only-build-your-binaries-once:25c5d87dd7a1a67a9e7f788e26731411&#34;&gt;Only Build Your Binaries Once&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Reduce the risk of introducing difference on each build.&lt;/li&gt;
+&lt;li&gt;Takes time to compile code (specially in large systems)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;deploy-the-same-way-to-every-environment:25c5d87dd7a1a67a9e7f788e26731411&#34;&gt;Deploy the Same Way to Every Environment&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Once you reach Production you are confident that your deployments work.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;smoke-test-your-deployments:25c5d87dd7a1a67a9e7f788e26731411&#34;&gt;Smoke-Test your Deployments&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;After deploying, immediately make sure that the most basic functionality works as expected.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;deploy-into-a-copy-of-production:25c5d87dd7a1a67a9e7f788e26731411&#34;&gt;Deploy into a copy of Production&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Make your environments a similar to production as pipeline.  Again, to reduce the risk of ofintroducing bugs.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;each-change-should-propagate-through-the-pipeline-instantly:25c5d87dd7a1a67a9e7f788e26731411&#34;&gt;Each Change Should Propagate through the Pipeline Instantly&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Each checking should trigger the start of the build process.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;if-any-part-of-the-pipeline-fails-stop-the-line:25c5d87dd7a1a67a9e7f788e26731411&#34;&gt;If Any Part of the Pipeline Fails, Stop the Line&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Developers should make sure that their code didn&amp;rsquo;t break anything.  If it does, they should fix it immediately.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

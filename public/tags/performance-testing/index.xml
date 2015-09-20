@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Performance Testing on A Technology Journal</title>
+    <link>http://localhost:1313/tags/performance-testing/</link>
+    <description>Recent content in Performance Testing on A Technology Journal</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 29 Oct 2012 10:50:03 -0700</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/performance-testing/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>A Performance Testing Methodology</title>
+      <link>http://localhost:1313/articles/a_performance_testing_methodology/</link>
+      <pubDate>Mon, 29 Oct 2012 10:50:03 -0700</pubDate>
+      
+      <guid>http://localhost:1313/articles/a_performance_testing_methodology/</guid>
+      <description>
+
+&lt;p&gt;The primary goal of any web site performance testing and capacity planning activity is to know how many users can our system handle under acceptable response times given certain hardware specifications.  We can get this information by graphing a &lt;em&gt;concurrency&lt;/em&gt; vs &lt;em&gt;response time&lt;/em&gt; graph.&lt;/p&gt;
+
+&lt;p&gt;A typical graph looks like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://s3.amazonaws.com/danvalencia_my_site/response_time_concurrency.png&#34; alt=&#34;Response time vs Concurrency&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Note how the curve grows exponentially. Depending on the nature of the website (or web pages) under test you might have different acceptable response times. For example, if you&amp;rsquo;re testing a service for uploading large images asynchronously, you might be able to tolerate larger response times.  In general, however, response time should be a non-functional requirement defined by your project&amp;rsquo;s stakeholders.&lt;/p&gt;
+
+&lt;p&gt;I will now go through a standard methodology for obtaining a graph like this.&lt;/p&gt;
+
+&lt;h3 id=&#34;performance-testing-concepts:c28dc0905f4751e20868ba42cc094c96&#34;&gt;Performance Testing Concepts&lt;/h3&gt;
+
+&lt;p&gt;Let me start by defining some important concepts:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Arrival Rate&lt;/strong&gt;: The rate at which requests arrive to the system.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NActive&lt;/strong&gt;: The number of active users in the system, either being serviced or waiting.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NConc&lt;/strong&gt;: The number of concurrent users being serviced in the system.  This is the number we want to graph against the response times.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Service Time&lt;/strong&gt;: The average response time for a given request when the system is under no load.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Think Time&lt;/strong&gt;: The time a user spends between requests, for example reading a webpage.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Duration of Stay&lt;/strong&gt;: The average time a user spends in the system. Also called &lt;em&gt;wait time&lt;/em&gt; or &lt;em&gt;session duration&lt;/em&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;getting-useful-data:c28dc0905f4751e20868ba42cc094c96&#34;&gt;Getting Useful Data&lt;/h3&gt;
+
+&lt;p&gt;The first thing to do is to obtain some data:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Number of visitors per month (or &lt;em&gt;Arrival Rate&lt;/em&gt;) we expect.&lt;/li&gt;
+&lt;li&gt;Average time a user spends in the site (or &lt;em&gt;Duration of Stay&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;Number of pages that the user visits on average.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For existing websites, these numbers are typically known or can easily be calculated by parsing web server access log files (e.g. &lt;em&gt;Apache access logs&lt;/em&gt;).  For new websites it&amp;rsquo;s a little bit more trickier as you&amp;rsquo;ll have to do some investigation.  You might consider talking with your customer and business analyst.&lt;/p&gt;
+
+&lt;p&gt;One thing to note is that, specially for new sites, the number of expected visitors is a ballpark number and it does not need to be exact. We need it as a starting point for our concurrency calculations. In these cases, setting some assumptions is a valid thing to do.&lt;/p&gt;
+
+&lt;p&gt;For this example we&amp;rsquo;ll use the following numbers:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Number of visitors per month: &lt;em&gt;100,000&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Duration of stay&lt;/em&gt; per visitor (on average): &lt;em&gt;5 minutes&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;Average number of clicks per user: &lt;em&gt;10&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We will also assume that the bulk of the visits happens in the course of 12 hours. Often you have to do this sort of adjustments. Again, for existing websites this can be obtained by analyzing access logs, but for new websites you can make assumptions.  For example, if you&amp;rsquo;re working on an e-commerce site that sells goods in the US, the bulk of your sales will likely happen during the day.&lt;/p&gt;
+
+&lt;h3 id=&#34;active-users:c28dc0905f4751e20868ba42cc094c96&#34;&gt;Active Users&lt;/h3&gt;
+
+&lt;p&gt;The first thing we need to do is to calculate the number of active users (or &lt;em&gt;NActive&lt;/em&gt;) at any given time.  We can obtain this using &lt;a href=&#34;http://en.wikipedia.org/wiki/Little%27s_law&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;Little&amp;rsquo;s Law&lt;/em&gt;&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;NActive = &amp;lambda;W&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;where &lt;em&gt;&amp;lambda;&lt;/em&gt; is the &lt;em&gt;arrival rate&lt;/em&gt; and &lt;em&gt;W&lt;/em&gt; is the &lt;em&gt;duration of stay&lt;/em&gt; (also called &lt;em&gt;wait time&lt;/em&gt;). We can calculate our arrival rate in visitors per minute by doing some simple math:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&amp;lambda; = 100,000 users/month
+100,000/30 = 3,333 users/day&lt;br /&gt;
+3,&lt;sup&gt;333&lt;/sup&gt;&amp;frasl;&lt;sub&gt;12&lt;/sub&gt; = 278 users/hour
+&lt;sup&gt;278&lt;/sup&gt;&amp;frasl;&lt;sub&gt;60&lt;/sub&gt; = 4.63 users/minute&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;With our &lt;em&gt;arrival rate&lt;/em&gt; in users per minute we can obtain the number of active users at any given time by multiplying by the &lt;em&gt;duration of stay&lt;/em&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;NActive = &amp;lambda;W&lt;br /&gt;
+NActive = (4.63 users/min) * (5 min)&lt;br /&gt;
+NActive = 23 users&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This means that on average, there are 23 users in the system, either waiting a response from the server or doing something else.  In other words, at any given time there are 23 &lt;em&gt;sessions&lt;/em&gt; on the server.&lt;/p&gt;
+
+&lt;h3 id=&#34;think-time:c28dc0905f4751e20868ba42cc094c96&#34;&gt;Think Time&lt;/h3&gt;
+
+&lt;p&gt;If we know the average number of &lt;em&gt;requests per user&lt;/em&gt; (&lt;em&gt;rpu&lt;/em&gt;) and we know the average time each user spends in the site (W), calculating the average &lt;em&gt;think time&lt;/em&gt; (&lt;em&gt;Z&lt;/em&gt;) or time between requests is pretty straightforward:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Z = W/rpu&lt;br /&gt;
+Z = 300sec/10&lt;br /&gt;
+Z = 30 sec&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;We will use this number for our &lt;em&gt;concurrency&lt;/em&gt; calculation.&lt;/p&gt;
+
+&lt;h3 id=&#34;nconc-or-concurrent-users:c28dc0905f4751e20868ba42cc094c96&#34;&gt;&lt;em&gt;NConc&lt;/em&gt; or concurrent users&lt;/h3&gt;
+
+&lt;p&gt;The number of concurrent users at any given time is a function of the number of active users and the percentage of time users are waiting for a request to complete.  Mathematically speaking:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;NConc = NActive( R / ( R+Z ) )&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;where &lt;em&gt;NConc&lt;/em&gt; is the number of &lt;em&gt;concurrent users_a at any given time, _NActive&lt;/em&gt; is the total number of users in the system, &lt;em&gt;R&lt;/em&gt; is the &lt;em&gt;service time&lt;/em&gt; and Z is the &lt;em&gt;think time&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;We have calculated all these numbers except the &lt;em&gt;service time&lt;/em&gt;. As mentioned before, this should be known for existing websites or should be relatively easy to obtain via the logs.  Another common practice is to perform benchmarking tests to obtain the average response time of each request when the system is under no load.  For this example we&amp;rsquo;ll assume that our service time is of &lt;em&gt;1 second&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;With the numbers we have, we can calculate the number of average concurrent users in our system:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;NConc = NActive( R / ( R+Z ) )&lt;br /&gt;
+NConc = 23( 1 / (1 + 30) )&lt;br /&gt;
+NConc = 0.74 users&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The calculated average concurrency is of &lt;em&gt;0.74&lt;/em&gt; users.  This makes sense given our numbers.  The cool thing about this formula is that we can simulate higher concurrency just by varying the &lt;em&gt;think time&lt;/em&gt;. As the think time is shortened, the concurrency increases. This is very useful when running our load tests because we are able to simulate higher loads in the system by using the same number of threads, hence saving computing resources.&lt;/p&gt;
+
+&lt;h3 id=&#34;writing-our-load-tests:c28dc0905f4751e20868ba42cc094c96&#34;&gt;Writing our load tests&lt;/h3&gt;
+
+&lt;p&gt;With the information we have we&amp;rsquo;re now ready to write our test scripts. The way we write our tests will vary depending on the tool we use (e.g. &lt;a href=&#34;http://jmeter.apache.org/&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;JMeter&lt;/em&gt;&lt;/a&gt; and &lt;a href=&#34;http://www.hpl.hp.com/research/linux/httperf/&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;httperf&lt;/em&gt;&lt;/a&gt; are both great open source tools). I&amp;rsquo;ll write about the creation of load tests in another article, but in a nutshell, you&amp;rsquo;ll need the following information:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;NActive&lt;/em&gt;, or number of users (or threads) to simulate.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Think time&lt;/em&gt;, or time to wait between requests.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;getting-your-graph:c28dc0905f4751e20868ba42cc094c96&#34;&gt;Getting your graph&lt;/h3&gt;
+
+&lt;p&gt;What you&amp;rsquo;ll want to do is then run the load tests for some time to obtain average response times as well as &lt;em&gt;std. dev&lt;/em&gt;, &lt;em&gt;median&lt;/em&gt;, &lt;em&gt;90th&lt;/em&gt; and &lt;em&gt;99th&lt;/em&gt; percentiles. Five minutes is a good rule of thumb for running your load tests, but you might also consider running longer tests for stressing the system. Then, you&amp;rsquo;ll want to run your tests again using higher loads (e.g. by varying the &lt;em&gt;think time&lt;/em&gt; or number of threads).  You&amp;rsquo;ll want repeat this several times (e.g. 5 - 10 times) until you have enough data points to plot a nice graph.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

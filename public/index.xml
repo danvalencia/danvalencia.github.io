@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>A Technology Journal</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on A Technology Journal</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 08 Aug 2013 10:56:50 -0700</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Hands (Part I)</title>
+      <link>http://localhost:1313/articles/hands_part_1/</link>
+      <pubDate>Thu, 08 Aug 2013 10:56:50 -0700</pubDate>
+      
+      <guid>http://localhost:1313/articles/hands_part_1/</guid>
+      <description>
+
+&lt;p&gt;I&amp;rsquo;m currently helping my friend Dave Gertler to build his Burning Man art installation which is called &lt;a href=&#34;http://handsburningman.blogspot.com/&#34;&gt;&lt;strong&gt;Hands&lt;/strong&gt;&lt;/a&gt;.  Specifically I&amp;rsquo;ll be focusing on the electronics, which is a fairly big chunk of work.  In this post I&amp;rsquo;ll introduce you to the project and show you some of the work we&amp;rsquo;ve been doing to make this a reality.&lt;/p&gt;
+
+&lt;h3 id=&#34;intro:deb9daccda79606df9da1aa7dd01da2c&#34;&gt;Intro&lt;/h3&gt;
+
+&lt;p&gt;The installation consists of 2 hands with the palms facing upwards.  The hands will be made out of CDX plywood and the piece is designed to be assembled as a huge 3D jigsaw puzzle. In addition, multiple series of LEDs will illuminate the hands. Check out the following scale model to have a better idea of what it looks like:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://s3.amazonaws.com/danvalencia_my_site/IMG_2179.JPG&#34; alt=&#34;Hands Scale Model&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The project is super ambitious: each hand will be 12 ft. tall and we&amp;rsquo;ve calculated more than 250 LEDs will be required.  Dave has given a &lt;em&gt;lot&lt;/em&gt; of thought to the structural design of the piece; given that people at Burning Man will undoubtly want to climb on the art pieces, the structure is designed to fit up to 18 people! &lt;em&gt;Per Hand!&lt;/em&gt; Given the irregular shape of the hand this probably won&amp;rsquo;t be possible in practice, but the structure will be strong enough to account for a lot of weight.&lt;/p&gt;
+
+&lt;p&gt;The following images illustrate the dimensions of the installation with respect to a human being:&lt;/p&gt;
+
+&lt;table&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;img src=&#34;http://s3.amazonaws.com/danvalencia_my_site/IMG_2175.JPG&#34;&gt;&lt;/img&gt;&lt;/td&gt;
+&lt;td&gt;&lt;img src=&#34;http://s3.amazonaws.com/danvalencia_my_site/IMG_2176.JPG&#34;&gt;&lt;/img&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&#34;the-electronics:deb9daccda79606df9da1aa7dd01da2c&#34;&gt;The Electronics&lt;/h3&gt;
+
+&lt;p&gt;The idea is that these Hands are illuminated with a series of LEDs that are individually addressable and can be programmed with different algorithms, similar to the &lt;a href=&#34;https://vimeo.com/25870560&#34;&gt;Bay Bridge Lights&lt;/a&gt;. Ok, probably not as sophisticated as the Bay Bridge Lights, but you get the idea.&lt;/p&gt;
+
+&lt;p&gt;For &lt;em&gt;Hands&lt;/em&gt; I&amp;rsquo;ve chosen to use an &lt;a href=&#34;http://www.arduino.cc/&#34;&gt;Arduino&lt;/a&gt;  as the &lt;em&gt;brains&lt;/em&gt; of the project for the following reasons:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;It&amp;rsquo;s very easy to use.&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;It&amp;rsquo;s open source and there are tons of code samples in the web.&lt;/li&gt;
+&lt;li&gt;Extensible architecture in the form of plug-in boards or &lt;em&gt;shields&lt;/em&gt; make it possible to add functionality such as WiFi or Bluetooth fairly easily.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;After researching for a little while we found a perfect step by step tutorial by &lt;a href=&#34;http://learn.adafruit.com/36mm-led-pixels/overview&#34;&gt;Adafruit&lt;/a&gt; for controlling strands of 36mm LED Pixels with an Arduino.  The LEDs were perfect, as they come coated for outdoor use and offer several mounting options.  We ordered some LEDs strips and started playing with &amp;lsquo;em immediately! Check out our first steps with the LEDs in the following video:&lt;/p&gt;
+
+&lt;iframe src=&#34;http://player.vimeo.com/video/61054270&#34; width=&#34;500&#34; height=&#34;282&#34; frameborder=&#34;0&#34; webkitAllowFullScreen mozallowfullscreen allowFullScreen&gt;&lt;/iframe&gt;
+
+&lt;h3 id=&#34;features-and-human-interaction:deb9daccda79606df9da1aa7dd01da2c&#34;&gt;Features and Human Interaction&lt;/h3&gt;
+
+&lt;p&gt;Human interaction is key for any Burning Man art installation and &lt;em&gt;Hands&lt;/em&gt; is no exception.  We thought about different ways in which people could interact with the LEDs. One thought we explored is the ability to control the LEDs via an iPhone or iPod.&lt;/p&gt;
+
+&lt;p&gt;In order to make this happen, we needed a way to establish wireless communication between the Arduino and an iOS device.  Bluetooth seemed like an obvious choice and after surfing the web for a while I found the amazing Arduino Bluetooth LE Shield by &lt;a href=&#34;http://redbearlab.com/bleshield/&#34;&gt;Red Bear Lab&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Until recently, Bluetooth support in iOS devices was restricted to Apple&amp;rsquo;s &lt;a href=&#34;https://developer.apple.com/programs/mfi/&#34;&gt;MFI&lt;/a&gt; program, which made it practically impossible for hobbyists to use.  Luckily for us, this changed, and starting with iOS 6, Apple released an SDK for Bluetooth 4.0 devices (called CoreBluetooth).&lt;/p&gt;
+
+&lt;p&gt;The Bluetooth shield comes with sample code for both the Arduino and iOS side of things. We realized that this was a very viable solution and decided to build an iOS app to interact with the LEDs.&lt;/p&gt;
+
+&lt;p&gt;I think I&amp;rsquo;ll save the details of my progress with the app for my next post. For now, check out the following video which demonstrates some of the progress I&amp;rsquo;ve made:&lt;/p&gt;
+
+&lt;iframe src=&#34;http://player.vimeo.com/video/68868345&#34; width=&#34;500&#34; height=&#34;281&#34; frameborder=&#34;0&#34; webkitAllowFullScreen mozallowfullscreen allowFullScreen&gt;&lt;/iframe&gt;
+
+&lt;p&gt;Stayed tuned for more Arduino, iOS and Burning man fun!&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Closures and Scoping in Javascript</title>
+      <link>http://localhost:1313/articles/closures_and_scoping_in_javascript/</link>
+      <pubDate>Sat, 02 Feb 2013 10:53:43 -0700</pubDate>
+      
+      <guid>http://localhost:1313/articles/closures_and_scoping_in_javascript/</guid>
+      <description>
+
+&lt;p&gt;Per Wikipedia, a Closure is:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&amp;hellip; a function or reference to a function together with a referencing environment—a table storing a reference to each of the non-local variables (also called free variables) of that function.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I want you to pay special attention to the last part of that definition: &lt;strong&gt;&lt;em&gt;together with a referencing environment, containing references to each of the non-local variables of that function&lt;/em&gt;&lt;/strong&gt;.  This is easier explained with a little code:&lt;/p&gt;
+
+&lt;pre class=&#34;brush: js&#34;&gt;
+     function closureTest() {
+          var outerVar = &#34;World&#34;;
+          document.onload = function() {
+               console.log(&#34;Hello&#34; + outerVar);
+          }
+     }
+&lt;/pre&gt;
+In this example, the _referencing environment_ corresponds to the _outerVar_ variable, and the closure is the function that&#39;s assigned to the _document.onload_ event property.   The result of this example is a &#34;Hello World&#34; message printed in the console when the document is loaded.  
+
+You might not be impressed by any of this, as this is a pretty trivial example.  The interesting thing to understand about closures lies not so much in the ability to treat functions as variables, but rather in the context (or _referencing environment_) that these functions can _reference_ in a future point in time.
+
+### A True Story about Closures
+
+The other day, as I was pair programming with my coworker, we ran into an issue which led us to a deeper understanding of how Javascript handles closures . The task at hand was a mini library for managing analytics events for a _HTML5_ mobile app.  Each analytics event is triggered by a DOM event (e.g. _click_) and can have 1 or more _attributes_ associated with it.  For example, these are the attributes associated with the _modelTap_ event:
+
+&lt;pre class=&#34;brush: js&#34;&gt;
+    {
+        &#39;navigationCategory&#39; : &#39;popular&#39;,
+        &#39;model&#39; : &#39;myModel&#39;
+    }
+&lt;/pre&gt;
+
+&lt;p&gt;Simple stuff.  The tricky part is that, different &lt;em&gt;events&lt;/em&gt; may contain different type of &lt;em&gt;attributes&lt;/em&gt;, and these &lt;em&gt;attributes&lt;/em&gt; need to be populated from different parts of the DOM.  We solved this is by creating an &lt;em&gt;array&lt;/em&gt; of analytic configuration objects, containing the following properties:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;em&gt;eventName&lt;/em&gt;&lt;/strong&gt;, a &lt;em&gt;String&lt;/em&gt;,&lt;/li&gt;
+&lt;li&gt;a CSS &lt;strong&gt;&lt;em&gt;selector&lt;/em&gt;&lt;/strong&gt;, a &lt;em&gt;String&lt;/em&gt;,&lt;/li&gt;
+&lt;li&gt;and a &lt;strong&gt;&lt;em&gt;getAttributes&lt;/em&gt;&lt;/strong&gt;  &lt;em&gt;Function&lt;/em&gt; that returns a Javascript object with the attributes for this event.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For example:&lt;/p&gt;
+
+&lt;pre class=&#34;brush: js&#34;&gt;
+    var analyticConfigs = [
+        {
+            eventName: &#39;modelTap&#39;,
+            selector: &#39;li.model&#39;,
+            getAttributes: function(context) {
+                var model = $(context).text();
+                var navigationCategory = $(context).find(&#39;#category&#39;).text();
+                return {model: model, navigationCategory: navigationCategory};
+            }
+        },
+        {
+            eventName: &#39;navTap&#39;,
+            selector: &#39;li.navigation_tab&#39;,
+            getAttributes: function(context) {
+                var tabName = $(context).text();
+                return {tabName: tabName};
+            }
+        }
+    ];
+&lt;/pre&gt;
+
+&lt;p&gt;The idea is to iterate through the configuration array and for each config object attach a &lt;em&gt;&amp;lsquo;click&amp;rsquo;&lt;/em&gt; event handler to the elements resolved by the &lt;em&gt;selector&lt;/em&gt; property.  Within the &lt;em&gt;click&lt;/em&gt; handler, we would call the function that&amp;rsquo;s responsible for resolving the &lt;em&gt;event name&lt;/em&gt; and&lt;br /&gt;
+&lt;em&gt;attributes&lt;/em&gt; object and send this info through the analytics API.&lt;/p&gt;
+
+&lt;p&gt;To put it in code:&lt;/p&gt;
+
+&lt;pre class=&#34;brush: js&#34;&gt;
+    for (var i = 0; i &lt; analyticConfigs.length; i++) {
+        var config = analyticConfigs[i];
+        $(&#39;body&#39;).on(&#39;click&#39;, config.selector, function() {
+            sendAnalyticsEvent(this, config);
+        })
+    }
+
+    function sendAnalyticsEvent(context, config) {
+        var eventName = config.eventName;
+        var attributes = config.getAttributes(context);
+
+                // Omitting API call to analytics code for clarity.
+        console.log(&#34;Sending analytic event: &#34; + eventName + &#34;; with attributes &#34; + JSON.stringify(attributes));
+    }
+&lt;/pre&gt;
+
+&lt;p&gt;This should work fine, right ? Turns out it doesn&amp;rsquo;t.  After doing a couple of clicks to the different elements, the output of this is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; &amp;gt; Sending analytic event: navTap; with attributes {&amp;quot;tabName&amp;quot;:&amp;quot;Super Tab&amp;quot;}
+ &amp;gt; Sending analytic event: navTap; with attributes {&amp;quot;tabName&amp;quot;:&amp;quot;Super Tab&amp;quot;}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Can you guess where the problem is ?&lt;/p&gt;
+
+&lt;p&gt;The problem lies in the &lt;em&gt;for&lt;/em&gt; loop.  Turns out, Javascript creates new scopes within &lt;em&gt;functions&lt;/em&gt; (i.e. private variables).  However, it does not do so within blocks (i.e. &lt;em&gt;for&lt;/em&gt; and &lt;em&gt;while&lt;/em&gt; loops).  This means that in the example above, there&amp;rsquo;s a single &lt;em&gt;config&lt;/em&gt; var created for the entire duration of the loop (and beyond!), and that every &lt;em&gt;closure&lt;/em&gt; created within the loop, will reference the same &lt;em&gt;config&lt;/em&gt; object.&lt;/p&gt;
+
+&lt;p&gt;To make this clearer, we can print the contents of the &lt;em&gt;config&lt;/em&gt; object outside the loop:&lt;/p&gt;
+
+&lt;pre class=&#34;brush: js&#34;&gt;
+     for (var i = 0; i &lt; analyticConfigs.length; i++) {
+          var config = analyticConfigs[i];
+          $(&#39;body&#39;).on(&#39;click&#39;, config.selector, function() {
+               sendAnalyticsEvent(this, config);
+          })
+     }  
+     console.log(&#34;Config: &#34; + config.eventName);
+&lt;/pre&gt;
+
+&lt;p&gt;The code above prints:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; &amp;gt; Config: navTap
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Sick, right ?&lt;/p&gt;
+
+&lt;h3 id=&#34;so-how-to-solve-this:08f3ab03952d0fba6b0e56ee042251be&#34;&gt;So, how to solve this?&lt;/h3&gt;
+
+&lt;p&gt;The key is to create a new scope for the &lt;em&gt;config&lt;/em&gt; variable.  As I mentioned previously, Javascript creates a new scope each time a function is created, so we can leverage this in the following way:&lt;/p&gt;
+
+&lt;pre class=&#34;brush: js&#34;&gt;
+     for (var i = 0; i &lt; analyticConfigs.length; i++) {
+          var config = analyticConfigs[i];
+          $(&#39;body&#39;).on(&#39;click&#39;, config.selector, function(cfg) {
+                return function() { sendAnalyticsEvent(this, cfg) };
+          }(config));
+     }  
+&lt;/pre&gt;
+
+&lt;p&gt;What we&amp;rsquo;re doing here is wrapping our function within an anonymous function that receives a &lt;em&gt;cfg&lt;/em&gt; parameter, effectively creating a new scope (where the &lt;em&gt;cfg&lt;/em&gt; var lives in).  We immediately call this function passing in our &lt;em&gt;config&lt;/em&gt; variable.&lt;/p&gt;
+
+&lt;p&gt;The output of this code is now:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; &amp;gt; Sending analytic event: modelTap; with attributes {&amp;quot;model&amp;quot;:&amp;quot; Super Model &amp;quot;,&amp;quot;navigationCategory&amp;quot;:&amp;quot;&amp;quot;}
+ &amp;gt; Sending analytic event: navTap; with attributes {&amp;quot;tabName&amp;quot;:&amp;quot; Super Tab &amp;quot;}  
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Interesting, right ?&lt;/p&gt;
+
+&lt;h3 id=&#34;conclusion:08f3ab03952d0fba6b0e56ee042251be&#34;&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;Lots of languages have closures: obviously functional languages such as Scala, Haskell, Clojure, etc, but also Object Oriented languages such as Ruby, Python, and C#.  Even in Java you can achieve similar functionality with anonymous inner classes.  In all of these languages though, new scopes are created within blocks such as &lt;em&gt;for&lt;/em&gt; and &lt;em&gt;while&lt;/em&gt; loops.&lt;/p&gt;
+
+&lt;p&gt;Take as an example the following Ruby code:&lt;/p&gt;
+
+&lt;pre class=&#34;brush: ruby&#34;&gt;
+     closure_array = []
+     numbers = %w{one two three}
+
+     numbers.each do |n|
+       closure_array &lt;&lt; -&gt;{puts n}
+     end
+
+     closure_array.each do |c|
+       c.call
+     end
+&lt;/pre&gt;
+
+&lt;p&gt;The output of the above code is:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; &amp;gt; one
+ &amp;gt; two
+ &amp;gt; three
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you can see, things work as expected, and there&amp;rsquo;s no need to create a new scope or anything like that.&lt;/p&gt;
+
+&lt;p&gt;Javascript is a very powerful language and it&amp;rsquo;s far from perfect.  In my opinion, this is a flaw of the language itself.  Of course, you can argue that it&amp;rsquo;s just a matter of understanding the language, but still you have to accept that it&amp;rsquo;s counter intuitive.  This is just one example of why languages such as &lt;em&gt;CoffeeScript&lt;/em&gt; have emerged.&lt;/p&gt;
+
+&lt;p&gt;All in all, I really enjoy programming in Javascript, and the more I understand it, the more enjoyable it becomes.&lt;/p&gt;
+
+&lt;p&gt;As Douglas Crockford put it, &lt;em&gt;Javascript&lt;/em&gt; is &lt;a href=&#34;http://www.crockford.com/javascript/javascript.html&#34;&gt;the worlds most misunderstood language.&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>A Performance Testing Methodology</title>
+      <link>http://localhost:1313/articles/a_performance_testing_methodology/</link>
+      <pubDate>Mon, 29 Oct 2012 10:50:03 -0700</pubDate>
+      
+      <guid>http://localhost:1313/articles/a_performance_testing_methodology/</guid>
+      <description>
+
+&lt;p&gt;The primary goal of any web site performance testing and capacity planning activity is to know how many users can our system handle under acceptable response times given certain hardware specifications.  We can get this information by graphing a &lt;em&gt;concurrency&lt;/em&gt; vs &lt;em&gt;response time&lt;/em&gt; graph.&lt;/p&gt;
+
+&lt;p&gt;A typical graph looks like this:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://s3.amazonaws.com/danvalencia_my_site/response_time_concurrency.png&#34; alt=&#34;Response time vs Concurrency&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Note how the curve grows exponentially. Depending on the nature of the website (or web pages) under test you might have different acceptable response times. For example, if you&amp;rsquo;re testing a service for uploading large images asynchronously, you might be able to tolerate larger response times.  In general, however, response time should be a non-functional requirement defined by your project&amp;rsquo;s stakeholders.&lt;/p&gt;
+
+&lt;p&gt;I will now go through a standard methodology for obtaining a graph like this.&lt;/p&gt;
+
+&lt;h3 id=&#34;performance-testing-concepts:c28dc0905f4751e20868ba42cc094c96&#34;&gt;Performance Testing Concepts&lt;/h3&gt;
+
+&lt;p&gt;Let me start by defining some important concepts:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Arrival Rate&lt;/strong&gt;: The rate at which requests arrive to the system.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NActive&lt;/strong&gt;: The number of active users in the system, either being serviced or waiting.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;NConc&lt;/strong&gt;: The number of concurrent users being serviced in the system.  This is the number we want to graph against the response times.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Service Time&lt;/strong&gt;: The average response time for a given request when the system is under no load.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Think Time&lt;/strong&gt;: The time a user spends between requests, for example reading a webpage.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Duration of Stay&lt;/strong&gt;: The average time a user spends in the system. Also called &lt;em&gt;wait time&lt;/em&gt; or &lt;em&gt;session duration&lt;/em&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;getting-useful-data:c28dc0905f4751e20868ba42cc094c96&#34;&gt;Getting Useful Data&lt;/h3&gt;
+
+&lt;p&gt;The first thing to do is to obtain some data:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Number of visitors per month (or &lt;em&gt;Arrival Rate&lt;/em&gt;) we expect.&lt;/li&gt;
+&lt;li&gt;Average time a user spends in the site (or &lt;em&gt;Duration of Stay&lt;/em&gt;)&lt;/li&gt;
+&lt;li&gt;Number of pages that the user visits on average.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For existing websites, these numbers are typically known or can easily be calculated by parsing web server access log files (e.g. &lt;em&gt;Apache access logs&lt;/em&gt;).  For new websites it&amp;rsquo;s a little bit more trickier as you&amp;rsquo;ll have to do some investigation.  You might consider talking with your customer and business analyst.&lt;/p&gt;
+
+&lt;p&gt;One thing to note is that, specially for new sites, the number of expected visitors is a ballpark number and it does not need to be exact. We need it as a starting point for our concurrency calculations. In these cases, setting some assumptions is a valid thing to do.&lt;/p&gt;
+
+&lt;p&gt;For this example we&amp;rsquo;ll use the following numbers:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Number of visitors per month: &lt;em&gt;100,000&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Duration of stay&lt;/em&gt; per visitor (on average): &lt;em&gt;5 minutes&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;Average number of clicks per user: &lt;em&gt;10&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We will also assume that the bulk of the visits happens in the course of 12 hours. Often you have to do this sort of adjustments. Again, for existing websites this can be obtained by analyzing access logs, but for new websites you can make assumptions.  For example, if you&amp;rsquo;re working on an e-commerce site that sells goods in the US, the bulk of your sales will likely happen during the day.&lt;/p&gt;
+
+&lt;h3 id=&#34;active-users:c28dc0905f4751e20868ba42cc094c96&#34;&gt;Active Users&lt;/h3&gt;
+
+&lt;p&gt;The first thing we need to do is to calculate the number of active users (or &lt;em&gt;NActive&lt;/em&gt;) at any given time.  We can obtain this using &lt;a href=&#34;http://en.wikipedia.org/wiki/Little%27s_law&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;Little&amp;rsquo;s Law&lt;/em&gt;&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;NActive = &amp;lambda;W&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;where &lt;em&gt;&amp;lambda;&lt;/em&gt; is the &lt;em&gt;arrival rate&lt;/em&gt; and &lt;em&gt;W&lt;/em&gt; is the &lt;em&gt;duration of stay&lt;/em&gt; (also called &lt;em&gt;wait time&lt;/em&gt;). We can calculate our arrival rate in visitors per minute by doing some simple math:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&amp;lambda; = 100,000 users/month
+100,000/30 = 3,333 users/day&lt;br /&gt;
+3,&lt;sup&gt;333&lt;/sup&gt;&amp;frasl;&lt;sub&gt;12&lt;/sub&gt; = 278 users/hour
+&lt;sup&gt;278&lt;/sup&gt;&amp;frasl;&lt;sub&gt;60&lt;/sub&gt; = 4.63 users/minute&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;With our &lt;em&gt;arrival rate&lt;/em&gt; in users per minute we can obtain the number of active users at any given time by multiplying by the &lt;em&gt;duration of stay&lt;/em&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;NActive = &amp;lambda;W&lt;br /&gt;
+NActive = (4.63 users/min) * (5 min)&lt;br /&gt;
+NActive = 23 users&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This means that on average, there are 23 users in the system, either waiting a response from the server or doing something else.  In other words, at any given time there are 23 &lt;em&gt;sessions&lt;/em&gt; on the server.&lt;/p&gt;
+
+&lt;h3 id=&#34;think-time:c28dc0905f4751e20868ba42cc094c96&#34;&gt;Think Time&lt;/h3&gt;
+
+&lt;p&gt;If we know the average number of &lt;em&gt;requests per user&lt;/em&gt; (&lt;em&gt;rpu&lt;/em&gt;) and we know the average time each user spends in the site (W), calculating the average &lt;em&gt;think time&lt;/em&gt; (&lt;em&gt;Z&lt;/em&gt;) or time between requests is pretty straightforward:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Z = W/rpu&lt;br /&gt;
+Z = 300sec/10&lt;br /&gt;
+Z = 30 sec&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;We will use this number for our &lt;em&gt;concurrency&lt;/em&gt; calculation.&lt;/p&gt;
+
+&lt;h3 id=&#34;nconc-or-concurrent-users:c28dc0905f4751e20868ba42cc094c96&#34;&gt;&lt;em&gt;NConc&lt;/em&gt; or concurrent users&lt;/h3&gt;
+
+&lt;p&gt;The number of concurrent users at any given time is a function of the number of active users and the percentage of time users are waiting for a request to complete.  Mathematically speaking:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;NConc = NActive( R / ( R+Z ) )&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;where &lt;em&gt;NConc&lt;/em&gt; is the number of &lt;em&gt;concurrent users_a at any given time, _NActive&lt;/em&gt; is the total number of users in the system, &lt;em&gt;R&lt;/em&gt; is the &lt;em&gt;service time&lt;/em&gt; and Z is the &lt;em&gt;think time&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;We have calculated all these numbers except the &lt;em&gt;service time&lt;/em&gt;. As mentioned before, this should be known for existing websites or should be relatively easy to obtain via the logs.  Another common practice is to perform benchmarking tests to obtain the average response time of each request when the system is under no load.  For this example we&amp;rsquo;ll assume that our service time is of &lt;em&gt;1 second&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;With the numbers we have, we can calculate the number of average concurrent users in our system:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;NConc = NActive( R / ( R+Z ) )&lt;br /&gt;
+NConc = 23( 1 / (1 + 30) )&lt;br /&gt;
+NConc = 0.74 users&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The calculated average concurrency is of &lt;em&gt;0.74&lt;/em&gt; users.  This makes sense given our numbers.  The cool thing about this formula is that we can simulate higher concurrency just by varying the &lt;em&gt;think time&lt;/em&gt;. As the think time is shortened, the concurrency increases. This is very useful when running our load tests because we are able to simulate higher loads in the system by using the same number of threads, hence saving computing resources.&lt;/p&gt;
+
+&lt;h3 id=&#34;writing-our-load-tests:c28dc0905f4751e20868ba42cc094c96&#34;&gt;Writing our load tests&lt;/h3&gt;
+
+&lt;p&gt;With the information we have we&amp;rsquo;re now ready to write our test scripts. The way we write our tests will vary depending on the tool we use (e.g. &lt;a href=&#34;http://jmeter.apache.org/&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;JMeter&lt;/em&gt;&lt;/a&gt; and &lt;a href=&#34;http://www.hpl.hp.com/research/linux/httperf/&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;httperf&lt;/em&gt;&lt;/a&gt; are both great open source tools). I&amp;rsquo;ll write about the creation of load tests in another article, but in a nutshell, you&amp;rsquo;ll need the following information:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;NActive&lt;/em&gt;, or number of users (or threads) to simulate.&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;Think time&lt;/em&gt;, or time to wait between requests.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;getting-your-graph:c28dc0905f4751e20868ba42cc094c96&#34;&gt;Getting your graph&lt;/h3&gt;
+
+&lt;p&gt;What you&amp;rsquo;ll want to do is then run the load tests for some time to obtain average response times as well as &lt;em&gt;std. dev&lt;/em&gt;, &lt;em&gt;median&lt;/em&gt;, &lt;em&gt;90th&lt;/em&gt; and &lt;em&gt;99th&lt;/em&gt; percentiles. Five minutes is a good rule of thumb for running your load tests, but you might also consider running longer tests for stressing the system. Then, you&amp;rsquo;ll want to run your tests again using higher loads (e.g. by varying the &lt;em&gt;think time&lt;/em&gt; or number of threads).  You&amp;rsquo;ll want repeat this several times (e.g. 5 - 10 times) until you have enough data points to plot a nice graph.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Notes On Continuous Delivery</title>
+      <link>http://localhost:1313/articles/notes_on_continuous_delivery/</link>
+      <pubDate>Tue, 23 Oct 2012 10:27:00 -0700</pubDate>
+      
+      <guid>http://localhost:1313/articles/notes_on_continuous_delivery/</guid>
+      <description>
+
+&lt;h3 id=&#34;only-build-your-binaries-once:25c5d87dd7a1a67a9e7f788e26731411&#34;&gt;Only Build Your Binaries Once&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Reduce the risk of introducing difference on each build.&lt;/li&gt;
+&lt;li&gt;Takes time to compile code (specially in large systems)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;deploy-the-same-way-to-every-environment:25c5d87dd7a1a67a9e7f788e26731411&#34;&gt;Deploy the Same Way to Every Environment&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Once you reach Production you are confident that your deployments work.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;smoke-test-your-deployments:25c5d87dd7a1a67a9e7f788e26731411&#34;&gt;Smoke-Test your Deployments&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;After deploying, immediately make sure that the most basic functionality works as expected.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;deploy-into-a-copy-of-production:25c5d87dd7a1a67a9e7f788e26731411&#34;&gt;Deploy into a copy of Production&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Make your environments a similar to production as pipeline.  Again, to reduce the risk of ofintroducing bugs.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;each-change-should-propagate-through-the-pipeline-instantly:25c5d87dd7a1a67a9e7f788e26731411&#34;&gt;Each Change Should Propagate through the Pipeline Instantly&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Each checking should trigger the start of the build process.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;if-any-part-of-the-pipeline-fails-stop-the-line:25c5d87dd7a1a67a9e7f788e26731411&#34;&gt;If Any Part of the Pipeline Fails, Stop the Line&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Developers should make sure that their code didn&amp;rsquo;t break anything.  If it does, they should fix it immediately.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

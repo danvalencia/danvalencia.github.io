@@ -1,0 +1,4 @@
+baseurl = "http://danielvalencia.me/"
+languageCode = "en-us"
+title = "A Technology Journal"
+theme = "hugo-theme-crisp"
