@@ -4,9 +4,6 @@ tags = ["hybris", "SSO", "SAML", "Okta", "Single Sign-On"]
 title = "Implementing SSO with hybris"
 
 +++
-
-## Implementing SSO with hybris
-
 This is the story of how I implemented Single Sign-On (SSO) functionality with [hybris](https://www.hybris.com/en/)  
 
 ### The Requirements
@@ -23,19 +20,20 @@ The first thing I had to do is familiarize myself with SAML (Security Assertion 
 
 The main concepts of SAML is that there's the concept of an Identity Provider (IdP), and a Service Provider (SP).
 
-*IdP*s are the systems in charge of authenticating users. They typically sit in front of a directory service such as Active Directory or LDAP. *SP*s are the applications that are secured with the SSO solution. In this example, hybris is the SP and Okta is the IdP.
+IdPs are the systems in charge of authenticating users. They typically sit in front of a directory service such as Active Directory or LDAP. SPs are the applications that are secured with the SSO solution. In this case, hybris is the SP and Okta is the IdP.
 
-Authentication happens by doing a series of browser intermediated HTTP requests, with SAML payload called Assertions. The payload is encrypted using private/public key pair encryption on both ways. The following image depicts the flow nicely:
+Authentication happens by doing a series of browser intermediated HTTP requests, with SAML payload called Assertions. The payload is encrypted using private/public key pair encryption on both ways. The following Wikipedia image depicts the flow nicely:
 
 <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Saml2-browser-sso-redirect-post.png/1280px-Saml2-browser-sso-redirect-post.png"></img>
 
-There are a 2 types of authentication flows:
-- IdP initiated authentication
-- SP initiated authentication
+There are a 2 types of authentication flows:   
+
+* IdP initiated authentication  
+* SP initiated authentication
 
 In IdP initiated authentication the users log in to the system via an IdP webpage (typically a dashboard). Upon successful authentication the user is then redirected to the SP endpoint.
 
-In SP initiated authentication, the user goes directly to the SP login page and enters her credentials there; she then gets redirected to the *IdP*s authentication endpoint and, if access is granted, she again gets redirected back to the SP.
+In SP initiated authentication, the user goes directly to the SP login page and enters her credentials there; she then gets redirected to the IdP's authentication endpoint and, if access is granted, she again gets redirected back to the SP.
 
 As you can see there's an extra redirect in SP initiated flow; even with that extra step the user experience can be arguably better with SP initiated flows.
 
@@ -91,21 +89,24 @@ Spring makes simple things easy, and complex tasks possible; Spring Security is 
     </security:authentication-provider>
   </security:authentication-manager>
 ```
-With these few lines of xml you get a lot for free:
+With these few lines of xml you get a lot for free:  
+
 * You get a login page with logout functionality.
 * You get a user service where you can define users and even assign roles.
 
 A few additional concepts to note here are:
-* `<security:http>` tag: here you can define the authenticated paths, as well as paths allowed for anonymous access, such as asset paths, or login pages. You may declare have multiple `<http>` configuration.
+
+* `<security:http>` tag: here you can define the authenticated paths, as well as paths allowed for anonymous access, such as asset paths, or login pages. You may declare have multiple `<security:http>` configurations.
 * `<security:authentication-manager>` tag: This is where the magic happens; inside this tag is where you define an *authentication-provider*, which is the main point of extension for Spring Security. In this example we're simply declaring default *authentication-manager* and *authentication-provider*.
 
 ### Spring Security SAML
-Everything's all fine and dandy with the basic Spring Security sample. It get's much more interesting (and kind of confusing to be honest) when using the [Spring Security SAML extension][http://projects.springgreat Okta + Sp.io/spring-security-saml/]. The documentation is pretty good to be fair, but there's so many concepts to understand that it can be kind of daunting.
+Everything's all fine and dandy with the basic Spring Security sample. It get's much more interesting (and kind of confusing to be honest) when using the [Spring Security SAML extension](http://projects.spring.io/spring-security-saml/). The documentation is pretty comprehensive to be fair, but there's so many concepts to understand that it can become very daunting.
 
-The good thing is that there's a [great Okta + Spring Security SAML sample project](http://developer.okta.com/docs/guides/spring_security_saml.html) which is exactly what I was looking for. So in order to implement the hybris SSO integration it was just a matter of configuring the cockpits to use the same approach as the sample app, or so I thought.
+The good thing is that there's a [great Okta + Spring Security SAML sample project](http://developer.okta.com/docs/guides/spring_security_saml.html) which is exactly what I was looking for. So in order to implement the hybris SSO integration it was just a matter of configuring the cockpits to use the same approach as the sample app.
 
 ### hybris security and Spring Security SAML
 As I mentioned in the beginning of this post, one of the key requirements was to have the ability to turn on/off SSO by using some sort of configuration. This would mean that I would need to be able to support 2 authentication mechanisms:
+
 * hybris OOTB authentication
 * SAML authentication
 
@@ -153,12 +154,13 @@ The SAML version of the above hybris configuration looks like this:
 <bean id="samlAuthenticationProvider" class="org.springframework.security.saml.SAMLAuthenticationProvider" />
 ```
 Contrasting these 2 configurations and after testing things out more than once I came to the following conclusions:
+
 * I needed to have a way to turn on/off `<security:http>` configurations based on a property.
-* I needed to be able to have 2 `authentication-provider`s: one for hybris auth and another one for SAML auth.
+* I needed to be able to have two `authentication-provider`s: one for hybris auth and another one for SAML auth.
 * Additionally our `authentication-manager` would need to
 choose the correct `authentication-provider` based on the same property.
 
-We were already using [Flip](https://github.com/tacitknowledge/flip) as a feature toggling framework, so it made sense to use this for switching SSO on and off.
+We were already using [Flip](https://github.com/tacitknowledge/flip) as a feature toggle framework, so it made sense to use this for switching SSO on and off as well.
 
 After a lot more investigation I found that one could add a reference to a [RequestMatcher](http://docs.spring.io/spring-security/site/docs/3.1.x/apidocs/org/springframework/security/web/util/RequestMatcher.html) to the `<security:http>` configuration. I could then use the RequestMatcher to enable or disable each one of the `<security:http>` configs.
 I created the following implementation of a RequestMatcher:  
