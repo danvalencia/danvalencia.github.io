@@ -215,8 +215,55 @@ With these beans in place I proceeded to configure the `request-matcher-ref` for
     <security:logout success-handler-ref="successLogoutHandler" />
 </security:http>
 ```
+With these `request-matcher-ref`s and using my feature toggle framework I was able to have both auth configurations in place, but only one of them active at a time.
 
-Thankfully this worked as expected.
+The next step was to figure out a way to use the same feature toggle to configure the correct `AuthenticationProvider`. I solved this by using a Spring factory bean, which would contain a reference to both the hybris and SSO `AuthenticationProvider`s. I used the same feature toggle to return the right bean:  
+
+``` java
+public class SstAuthenticationProviderFactory
+{
+   @Resource
+   private FeatureService featureService;
+
+   @Resource
+   private AuthenticationProvider coreAuthenticationProvider;
+
+   @Resource
+   private AuthenticationProvider samlAuthenticationProvider;
+
+   public AuthenticationProvider createInstance()
+   {
+       if (featureService.isFeatureEnabled(Features.COCKPIT_SSO))
+       {
+           return samlAuthenticationProvider;
+       } else
+       {
+           return coreAuthenticationProvider;
+       }
+   }
+}
+```
+
+And I declared both `AuthenticationProvider`s and the `SstAuthenticationProviderFactory` factory beans in the following way:  
+``` xml
+<!-- This bean acts like a single bean, and with the factory-bean and factory-method attributes
+     it will return the right instance based on our feature toggle-->
+<bean id="authenticationProvider" factory-bean="authenticationProviderFactory" factory-method="createInstance"/>
+
+<!-- We declare our factory bean here, it gets wired by Spring annotations -->
+<bean id="authenticationProviderFactory" class="com.sst.core.security.SstAuthenticationProviderFactory"/>
+
+<!-- SAML Authentication Provider responsible for validating of received SAML messages -->
+<bean id="samlAuthenticationProvider" class="com.sst.core.security.SstSAMLAuthenticationProvider" />
+
+<!-- hybris OOTB Authentication Provider-->
+<bean id="coreAuthenticationProvider" class="de.hybris.platform.cockpit.security.CockpitAuthenticationProvider">
+    <property name="preAuthenticationChecks" ref="corePreAuthenticationChecks" />
+    <property name="userDetailsService" ref="coreUserDetailsService" />
+</bean>
+```
+
+With those 2 changes in place, I was able to switch between normal authentication and SAML authentication.
 
 ### Challenges
 
