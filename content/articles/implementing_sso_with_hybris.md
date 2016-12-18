@@ -2,7 +2,7 @@
 date = "2015-10-20T10:50:03-07:00"
 tags = ["hybris", "SSO", "SAML", "Okta", "Single Sign-On"]
 title = "Implementing SSO with hybris"
-
+draft = true
 +++
 This is the story of how I implemented Single Sign-On (SSO) functionality with [hybris](https://www.hybris.com/en/)  
 
