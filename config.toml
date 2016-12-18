@@ -2,3 +2,7 @@ baseurl = "http://danielvalencia.me/"
 languageCode = "en-us"
 title = "a technology journal"
 theme = "detox"
+
+[params]
+  description = "Notes about technology, life and other stuff"
+  author = "Daniel Valencia"
