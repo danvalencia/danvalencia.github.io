@@ -9,7 +9,8 @@ I have over 10 years of experience as a software engineer and technical lead acr
 #### *VP of Engineering*, Tacit Knowledge Latin America., Guadalajara, México (October 2015 - current)
 
 As a VP of Engineering for Tacit Knowledge Latin America, I'm responsible for the engineering excellence and success of our consulting projects. I'm also responsible for the growth of our engineering staff. Besides this I'm also involved in day to day consulting work.
-Some of my main accomplishments during my tenure as VP include:
+Some of my main accomplishments during my tenure as VP include:   
+
 - Work with the leads of the different teams to solve engineering and people related issues.
 - Worked closely with the CTO and directors to define our corporate strategy.
 - Re-engage employee collaboration and knowledge-sharing by implementing weekly lunch and learn sessions.
