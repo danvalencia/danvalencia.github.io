@@ -11,12 +11,22 @@ I have over 10 years of experience as a software engineer and technical lead acr
 As a VP of Engineering for Tacit Knowledge Latin America, I'm responsible for the engineering excellence and success of our consulting projects. I'm also responsible for the growth of our engineering staff. Besides this I'm also involved in day to day consulting work.
 Some of my main accomplishments during my tenure as VP include:   
 
-- Work with the leads of the different teams to solve engineering and people related issues.
 - Worked closely with the CTO and directors to define our corporate strategy.
+- Work with the leads of the different teams to solve engineering and people related issues.
 - Re-engage employee collaboration and knowledge-sharing by implementing weekly lunch and learn sessions.
 - Led the implementation of a company wide Tacit Knowledge blog.
 - Improved our local community presence by co-organizing the local Java User Group meetup.
 - Participated in multiple speaking engagements in the local JUG community and the eCommerce community.
+
+##### Project Brooklyn, Loblaws
+
+- Consolidation of multiple legacy loyalty programs into a single unified one.
+- Architecture for new offers and account management sections for _beautyboutique.com_ using ReactJS.
+- Design and implementation for the following functionality:
+    - Loyalty point redemption during checkout process.
+    - CSV report generation for returns and partial shipments.
+    - API for accessing CMS content from React app.
+- Mentoring and guidance to more junior members of team.
 
 ##### Returns Plus, Newgistics
 
