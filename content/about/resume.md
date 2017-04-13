@@ -18,11 +18,12 @@ Some of my main accomplishments during my tenure as VP include:
 - Improved our local community presence by co-organizing the local Java User Group meetup.
 - Participated in multiple speaking engagements in the local JUG community and the eCommerce community.
 
-##### Project Brooklyn, Loblaws
+##### Project X, Major Retailer
 
 - Consolidation of multiple legacy loyalty programs into a single unified one.
-- Architecture for new offers and account management sections for _beautyboutique.com_ using ReactJS.
-- Design and implementation for the following functionality:
+- Architecture for new offers and account management sections for _major retailer website_ using ReactJS.
+- Tech led design and implementation for the following functionality:
+    - Front-end architecture using ReactJS, React Router and RequireJS.
     - Loyalty point redemption during checkout process.
     - CSV report generation for returns and partial shipments.
     - API for accessing CMS content from React app.
