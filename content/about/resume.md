@@ -4,28 +4,36 @@
 
 ### Professional Summary  
 
-I have over 10 years of experience as a software engineer and technical lead across multiple projects. My strengths lies on my breadth of knowledge across the development stack: UI, mobile app development, backend development, infrastructure engineering, QA and performance/load testing.  I have strong expertise in Java based web application development and I'm also proficient in other languages and platforms such as Javascript, Go, Ruby on Rails and iOS. I develop code using industry best practices such as Continuous Integration, TDD and code analysis, always treating Software Development as a craft.
+I have over 10 years of experience as a software engineer and technical lead across a diverse set of projects that span from greenfield development to big complex integration projects with startups and enterprises in the fields of eCommerce, media, real estate, and AEC.
 
-### *Senior Software Engineer*, Helix RE Inc, San Francisco, CA (February 2018 - current)
+I am a generalist that enjoys a good challenge. My strength lies on my breadth of experience: backend development, UI, mobile app development, infrastructure engineering, QA, performance/load testing, and people management. I have strong expertise in Java based web application development and I'm also proficient in other languages and platforms such as Javascript, Go, Ruby on Rails, Python and iOS. 
 
-As a founding engineer for Helix, I've had the opportunity to architect and build our autoscalable cloud platform from scratch. Some of my main accomplishments so far include:
+I treat software development as a craft, and I like my code well tested. I know that test coverage is important, but 100% coverage is impractical. I've done TDD and pair programming enough to understand its value, but I'm also pragmatic and understand that prototyping sometimes requires different approaches.  
 
-- Establish key architectural decisions for our microservices based architecture.
-- Write orchestrating microservice for our image processing pipeline.
-- Wrote a file upload microservice for managing files of any size in a robust way using GCS resumable uploads with signed urls.
+Collaboration is important to me, and I love bouncing ideas with fellow teammates. I enjoy mentoring fellow engineers and have held people management and leadership positions.
+
+### *Senior Software Engineer*, HELIX RE Inc, San Francisco, CA (February 2018 - current)
+
+As a founding engineer for HELIX, I've had the opportunity to design and build our cloud platform from scratch. On my day to day at HELIX, I work closely with product, UX, frontend, backend and infrastructure engineers to build the features that comprise the HELIX platform. Some of my main accomplishments include:
+
+- Establish key architectural decisions for the HELIX platform.
+- Designed and implemented APIs for photo tour creation, point cloud management, job scheduling and orchestration, and file uploads of any size.
+- Implemented authentication/authorization mechanism for the HELIX platform.
 - Build infrastructure iteratively using infrastructure as code principles with Terraform and Helm charts.
+- Managed a team of 4 engineers distributed globally in London, San Mateo and Guadalajara.
+- Created offshore entity for HELIX in Guadalajara, Mexico.
 
 Technologies used:
 - For our Microservices: Java, Spring Boot, Gradle.
 - For our Infrastructure: Terraform, Helm Charts, Vault.
-- Google Cloud Platform: Cloud Datastore, Cloud PostgreSQL, Pub/Sub, Kubernetes Engine, Cloud Storage.
+- Google Cloud Platform: Datastore, Cloud SQL, Pub/Sub, Kubernetes Engine, Cloud Storage.
 
 ### *Senior Software Engineer*, Flux Data Inc, San Francisco, CA (December 2017 - February 2018)
 
 As a Senior Software Engineer at Flux I was responsible of maintaining and building new features for the Flux platform. Some of my accomplishments include:
 
 - Built a scalable file datastore by repurposing an existing JSON blob store to support any content type. One of main constraints was that existing APIs and plugins for the Flux ecosystem should continue to work without any change of functionality.
-- Became the main owner of the Flux legacy platform built with Golang.
+- Main owner of the Flux legacy platform built with Golang.
 
 Technologies used: Golang, MySQL, Google Cloud Storage.
 
