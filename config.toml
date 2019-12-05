@@ -4,5 +4,5 @@ title = "A Technology Journal"
 theme = "detox"
 
 [params]
-  description = "Notes about technology, life and other stuff"
+  description = "Notes about technology and life."
   author = "Daniel Valencia"
