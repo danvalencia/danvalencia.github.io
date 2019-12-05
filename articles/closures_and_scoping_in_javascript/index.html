@@ -1,0 +1,86 @@
+<!doctype html><!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]--><!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"><![endif]--><!--[if IE 8]><html class="no-js lt-ie9"><![endif]--><!--[if gt IE 8]><!--><html class=no-js prefix="og: http://ogp.me/ns#" xmlns:og=http://ogp.me/ns#><!--<![endif]--><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="IE=edge"><meta name=description content><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1"><meta name=mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-capable content="yes"><meta name=apple-mobile-web-app-status-bar-style content="black"><meta name=author content="Daniel Valencia"><meta property="og:site_name" content="A Technology Journal"><meta property="og:title" content="A Technology Journal"><meta property="og:url" content="http://danvalencia.github.io/articles/closures_and_scoping_in_javascript/"><meta property="og:description" content="Notes about technology and life."><meta property="og:type" content="article"><meta property="og:article:author" content="Daniel Valencia"><meta property="og:article:published_time" content="2013-02-02T10:53:43-07:00"><meta name=generator content="Hugo 0.59.1"><title>Closures and Scoping in Javascript &middot; A Technology Journal</title><link rel=canonical href=http://danvalencia.github.io/><link rel=alternate type=application/rss+xml title=RSS href><link rel=stylesheet type=text/css href=http://danvalencia.github.io/css/main.css><link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:300|Montserrat:700" rel=stylesheet type=text/css><link href=//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css rel=stylesheet><script src=//code.jquery.com/jquery-1.10.2.min.js></script></head><body><!--[if lt IE 7]><p class=browsehappy>You are using an <strong>outdated</strong> browser. Please <a href=http://browsehappy.com/>upgrade your browser</a> or <a href=http://www.google.com/chrome/‎>install Google Chrome</a> to experience this site.</p><![endif]--><header id=site-header><div class=container><a href=http://danvalencia.github.io/ alt="A Technology Journal"><h1 class="blog-title heading">A Technology Journal</h1></a><p class=blog-description>Notes about technology and life.</p></div></header><main class=content role=main><div class=container><article class=articles><header class=post-header><h3 class=p-post-title>Closures and Scoping in Javascript</h3></header><section class=post-content><p>Per Wikipedia, a Closure is:</p><blockquote><p>&hellip; a function or reference to a function together with a referencing environment—a table storing a reference to each of the non-local variables (also called free variables) of that function.</p></blockquote><p>I want you to pay special attention to the last part of that definition: <strong><em>together with a referencing environment, containing references to each of the non-local variables of that function</em></strong>. This is easier explained with a little code:</p><pre class="brush: js">
+     function closureTest() {
+          var outerVar = "World";
+          document.onload = function() {
+               console.log("Hello" + outerVar);
+          }
+     }
+</pre>In this example, the _referencing environment_ corresponds to the _outerVar_ variable, and the closure is the function that's assigned to the _document.onload_ event property. The result of this example is a "Hello World" message printed in the console when the document is loaded.
+You might not be impressed by any of this, as this is a pretty trivial example. The interesting thing to understand about closures lies not so much in the ability to treat functions as variables, but rather in the context (or _referencing environment_) that these functions can _reference_ in a future point in time.
+### A True Story about Closures
+The other day, as I was pair programming with my coworker, we ran into an issue which led us to a deeper understanding of how Javascript handles closures . The task at hand was a mini library for managing analytics events for a _HTML5_ mobile app. Each analytics event is triggered by a DOM event (e.g. _click_) and can have 1 or more _attributes_ associated with it. For example, these are the attributes associated with the _modelTap_ event:<pre class="brush: js">
+    {
+        'navigationCategory' : 'popular',
+        'model' : 'myModel'
+    }
+</pre><p>Simple stuff. The tricky part is that, different <em>events</em> may contain different type of <em>attributes</em>, and these <em>attributes</em> need to be populated from different parts of the DOM. We solved this is by creating an <em>array</em> of analytic configuration objects, containing the following properties:</p><ul><li><strong><em>eventName</em></strong>, a <em>String</em>,</li><li>a CSS <strong><em>selector</em></strong>, a <em>String</em>,</li><li>and a <strong><em>getAttributes</em></strong> <em>Function</em> that returns a Javascript object with the attributes for this event.</li></ul><p>For example:</p><pre class="brush: js">
+    var analyticConfigs = [
+        {
+            eventName: 'modelTap',
+            selector: 'li.model',
+            getAttributes: function(context) {
+                var model = $(context).text();
+                var navigationCategory = $(context).find('#category').text();
+                return {model: model, navigationCategory: navigationCategory};
+            }
+        },
+        {
+            eventName: 'navTap',
+            selector: 'li.navigation_tab',
+            getAttributes: function(context) {
+                var tabName = $(context).text();
+                return {tabName: tabName};
+            }
+        }
+    ];
+</pre><p>The idea is to iterate through the configuration array and for each config object attach a <em>&lsquo;click&rsquo;</em> event handler to the elements resolved by the <em>selector</em> property. Within the <em>click</em> handler, we would call the function that&rsquo;s responsible for resolving the <em>event name</em> and<br><em>attributes</em> object and send this info through the analytics API.</p><p>To put it in code:</p><pre class="brush: js">
+    for (var i = 0; i < analyticConfigs.length; i++) {
+        var config = analyticConfigs[i];
+        $('body').on('click', config.selector, function() {
+            sendAnalyticsEvent(this, config);
+        })
+    }
+
+    function sendAnalyticsEvent(context, config) {
+        var eventName = config.eventName;
+        var attributes = config.getAttributes(context);
+
+                // Omitting API call to analytics code for clarity.
+        console.log("Sending analytic event: " + eventName + "; with attributes " + JSON.stringify(attributes));
+    }
+</pre><p>This should work fine, right ? Turns out it doesn&rsquo;t. After doing a couple of clicks to the different elements, the output of this is:</p><pre><code> &gt; Sending analytic event: navTap; with attributes {&quot;tabName&quot;:&quot;Super Tab&quot;}
+ &gt; Sending analytic event: navTap; with attributes {&quot;tabName&quot;:&quot;Super Tab&quot;}
+</code></pre><p>Can you guess where the problem is ?</p><p>The problem lies in the <em>for</em> loop. Turns out, Javascript creates new scopes within <em>functions</em> (i.e. private variables). However, it does not do so within blocks (i.e. <em>for</em> and <em>while</em> loops). This means that in the example above, there&rsquo;s a single <em>config</em> var created for the entire duration of the loop (and beyond!), and that every <em>closure</em> created within the loop, will reference the same <em>config</em> object.</p><p>To make this clearer, we can print the contents of the <em>config</em> object outside the loop:</p><pre class="brush: js">
+     for (var i = 0; i < analyticConfigs.length; i++) {
+          var config = analyticConfigs[i];
+          $('body').on('click', config.selector, function() {
+               sendAnalyticsEvent(this, config);
+          })
+     }  
+     console.log("Config: " + config.eventName);
+</pre><p>The code above prints:</p><pre><code> &gt; Config: navTap
+</code></pre><p>Sick, right ?</p><h3 id=so-how-to-solve-this>So, how to solve this?</h3><p>The key is to create a new scope for the <em>config</em> variable. As I mentioned previously, Javascript creates a new scope each time a function is created, so we can leverage this in the following way:</p><pre class="brush: js">
+     for (var i = 0; i < analyticConfigs.length; i++) {
+          var config = analyticConfigs[i];
+          $('body').on('click', config.selector, function(cfg) {
+                return function() { sendAnalyticsEvent(this, cfg) };
+          }(config));
+     }  
+</pre><p>What we&rsquo;re doing here is wrapping our function within an anonymous function that receives a <em>cfg</em> parameter, effectively creating a new scope (where the <em>cfg</em> var lives in). We immediately call this function passing in our <em>config</em> variable.</p><p>The output of this code is now:</p><pre><code> &gt; Sending analytic event: modelTap; with attributes {&quot;model&quot;:&quot; Super Model &quot;,&quot;navigationCategory&quot;:&quot;&quot;}
+ &gt; Sending analytic event: navTap; with attributes {&quot;tabName&quot;:&quot; Super Tab &quot;}  
+</code></pre><p>Interesting, right ?</p><h3 id=conclusion>Conclusion</h3><p>Lots of languages have closures: obviously functional languages such as Scala, Haskell, Clojure, etc, but also Object Oriented languages such as Ruby, Python, and C#. Even in Java you can achieve similar functionality with anonymous inner classes. In all of these languages though, new scopes are created within blocks such as <em>for</em> and <em>while</em> loops.</p><p>Take as an example the following Ruby code:</p><pre class="brush: ruby">
+     closure_array = []
+     numbers = %w{one two three}
+
+     numbers.each do |n|
+       closure_array << ->{puts n}
+     end
+
+     closure_array.each do |c|
+       c.call
+     end
+</pre><p>The output of the above code is:</p><pre><code> &gt; one
+ &gt; two
+ &gt; three
+</code></pre><p>As you can see, things work as expected, and there&rsquo;s no need to create a new scope or anything like that.</p><p>Javascript is a very powerful language and it&rsquo;s far from perfect. In my opinion, this is a flaw of the language itself. Of course, you can argue that it&rsquo;s just a matter of understanding the language, but still you have to accept that it&rsquo;s counter intuitive. This is just one example of why languages such as <em>CoffeeScript</em> have emerged.</p><p>All in all, I really enjoy programming in Javascript, and the more I understand it, the more enjoyable it becomes.</p><p>As Douglas Crockford put it, <em>Javascript</em> is <a href=http://www.crockford.com/javascript/javascript.html>the worlds most misunderstood language.</a></p></section><hr><footer class=post-footer><section class=f-1><section class=author><p>Words by Daniel Valencia</p></section><p class=f-post-time><time datetime=2013-02-02T10:53:43-07:00>February 2, 2013</time></p></section><section class=f-2><section class=share><span>Share:
+<a class=icon-twitter href="http://twitter.com/share?text=Closures%20and%20Scoping%20in%20Javascript&url=http%3a%2f%2fdanvalencia.github.io%2farticles%2fclosures_and_scoping_in_javascript%2f" onclick="window.open(this.href,'twitter-share','width=550,height=235');return false;"><i class="fa fa-twitter"></i></a><a class=icon-facebook href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fdanvalencia.github.io%2farticles%2fclosures_and_scoping_in_javascript%2f" onclick="window.open(this.href,'facebook-share','width=580,height=296');return false;"><i class="fa fa-facebook"></i></a><a class=icon-google-plus href="https://plus.google.com/share?url=http%3a%2f%2fdanvalencia.github.io%2farticles%2fclosures_and_scoping_in_javascript%2f" onclick="window.open(this.href,'google-plus-share','width=490,height=530');return false;"><i class="fa fa-google-plus"></i></a></span></section><span class=f-post-tags><i class="fa fa-tag"></i>javascript</span></section></footer></article></div></main><footer id=site-footer><div class=container><a href=http://danvalencia.github.io/index.xml title="Get the RSS feed"><span class=tooltip><i class="fa fa-rss"></i></span></a><section>&copy; <a href=http://danvalencia.github.io/>Daniel Valencia</a> 2017 | All rights reserved</section><section>Theme by <a href=http://www.jrdnbwmn.com>Jordan Bowman</a>. Generated with <a href=http://gohugo.io/>Hugo</a>.</section></div></footer><script type=text/javascript src=http://danvalencia.github.io/js/fittext.js></script><script type=text/javascript>$(".heading").fitText();</script></body></html>
