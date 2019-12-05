@@ -1,4 +1,4 @@
--**[Click to download PDF version of my resume](/about/daniel-valencia-resume.pdf)**
+**[Click to download PDF version of my resume](/about/daniel-valencia-resume.pdf)**
 
 ## Daniel Valencia Backhoff, Software Engineer
 
