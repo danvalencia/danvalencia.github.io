@@ -1,4 +1,4 @@
-baseurl = "http://danvalencia.github.io/"
+baseurl = "https://danvalencia.github.io/"
 languageCode = "en-us"
 title = "A Technology Journal"
 theme = "detox"
