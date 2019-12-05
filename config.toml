@@ -1,6 +1,6 @@
 baseurl = "http://danvalencia.github.io/"
 languageCode = "en-us"
-title = "a technology journal"
+title = "A Technology Journal"
 theme = "detox"
 
 [params]
