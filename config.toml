@@ -1,8 +1,74 @@
 baseurl = "https://danvalencia.github.io/"
 languageCode = "en-us"
 title = "A Technology Journal"
-theme = "detox"
+theme = "hello-friend-ng"
 
 [params]
+  dateform        = "Jan 2, 2006"
+  dateformShort   = "Jan 2"
+  dateformNum     = "2006-01-02"
+  dateformNumTime = "2006-01-02 15:04 -0700"
+
+  # Set disableReadOtherPosts to true in order to hide the links to other posts.
+  disableReadOtherPosts = false
+
+  # Metadata mostly used in document's head
   description = "Notes about technology and life."
   author = "Daniel Valencia"
+  keywords = "homepage, blog, science, informatics, development, programming"
+  images = [""]
+
+  # Directory name of your blog content (default is `content/posts`)
+  contentTypeName = "posts"
+
+  # Default theme "light" or "dark"
+  defaultTheme = "dark"
+
+# Social icons
+  [[params.social]]
+    name = "twitter"
+    url  = "https://twitter.com/_DanValencia"
+
+  [[params.social]]
+    name = "github"
+    url  = "https://github.com/danvalencia"
+
+  [[params.social]]
+    name = "linkedin"
+    url  = "https://www.linkedin.com/in/danvalencia"
+
+  [[params.social]]
+    name = "stackoverflow"
+    url  = "https://stackoverflow.com/users/3254682/danvalencia"
+
+
+[languages]
+  [languages.en]
+    title = "A Technology Journal"
+    subtitle = "by Daniel Valencia"
+    keywords = ""
+    copyright = ""
+    readOtherPosts = "Read other posts"
+
+    [languages.en.params.logo]
+      logoText = "danvalencia$"
+      logoHomeLink = "/"
+    # or
+    #
+    # path = "/img/your-example-logo.svg"
+    # alt = "Your example logo alt text"
+
+  # And you can even create generic menu
+  [[menu.main]]
+    identifier = "blog"
+    name       = "Blog"
+    url        = "/articles"
+
+  [[menu.main]]
+    identifier = "about"
+    name       = "About"
+    url        = "/about/me"
+    
+[taxonomies]
+  tag      = "tags"
+  category = "categories"
