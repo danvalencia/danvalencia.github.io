@@ -2,7 +2,7 @@
 date = "2015-10-20T10:50:03-07:00"
 tags = ["hybris", "SSO", "SAML", "Okta", "Single Sign-On"]
 title = "Implementing SSO with hybris"
-draft = true
+draft = false 
 +++
 This is the story of how I implemented Single Sign-On (SSO) functionality with [hybris](https://www.hybris.com/en/)  
 
@@ -274,7 +274,6 @@ And I declared both `AuthenticationProvider`s and the `SstAuthenticationProvider
 
 With those 2 changes in place, I was able to switch between normal authentication and SAML authentication.
 
-### Challenges
+### Conclusion
 
-
-### Lessons Learned
+Spring Security is a very powerful framework that handles virtually every possible imaginable scenario. As such, it takes a non-trivial amount of time to understand its concepts. Coupled with the complexity of the hybris platform, it can become a daunting task to customize according to your needs.

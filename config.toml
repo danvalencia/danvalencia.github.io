@@ -1,6 +1,7 @@
 baseurl = "https://danvalencia.github.io/"
 languageCode = "en-us"
 title = "A Technology Journal"
+subtitle = "Notes about technology and life."
 theme = "hello-friend-ng"
 
 [params]
@@ -14,15 +15,15 @@ theme = "hello-friend-ng"
 
   # Metadata mostly used in document's head
   description = "Notes about technology and life."
-  author = "Daniel Valencia"
-  keywords = "homepage, blog, science, informatics, development, programming"
+  author = "Daniel Valencia Backhoff"
+  keywords = "homepage, blog, informatics, software development, programming"
   images = [""]
 
   # Directory name of your blog content (default is `content/posts`)
-  contentTypeName = "posts"
+  contentTypeName = "articles"
 
   # Default theme "light" or "dark"
-  defaultTheme = "dark"
+  defaultTheme = "light"
 
 # Social icons
   [[params.social]]
@@ -45,13 +46,13 @@ theme = "hello-friend-ng"
 [languages]
   [languages.en]
     title = "A Technology Journal"
-    subtitle = "by Daniel Valencia"
+    subtitle = "Notes about technology and life."
     keywords = ""
     copyright = ""
     readOtherPosts = "Read other posts"
 
     [languages.en.params.logo]
-      logoText = "danvalencia$"
+      logoText = " cd ~"
       logoHomeLink = "/"
     # or
     #
