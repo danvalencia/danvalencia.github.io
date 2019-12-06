@@ -4,6 +4,9 @@ title = "A Technology Journal"
 subtitle = "Notes about technology and life."
 theme = "hello-friend-ng"
 
+[author]
+  name = "Daniel Valencia Backhoff"
+
 [params]
   dateform        = "Jan 2, 2006"
   dateformShort   = "Jan 2"
@@ -15,7 +18,6 @@ theme = "hello-friend-ng"
 
   # Metadata mostly used in document's head
   description = "Notes about technology and life."
-  author = "Daniel Valencia Backhoff"
   keywords = "homepage, blog, informatics, software development, programming"
   images = [""]
 
