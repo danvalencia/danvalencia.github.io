@@ -1,0 +1,164 @@
+<!doctype html><html lang=en><head><meta charset=utf-8><meta http-equiv=x-ua-compatible content="ie=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=author content><meta name=description content="This is the story of how I implemented Single Sign-On (SSO) functionality with hybris
+The Requirements When the client requested us to implement SSO functionality with hybris there didn&amp;rsquo;t provide much details besides the Identity Provider (IdP) of choice, which was Okta. The client had already implemented SSO for other applications (namely Widen, a cloud base DAM), and given that there was zero experience doing this with hybris we were somehow convinced that it was an easy feature to implement (mistake #1)."><meta name=keywords content><meta name=robots content="noodp"><meta name=theme-color content><link rel=canonical href=https://danvalencia.github.io/articles/implementing_sso_with_hybris/><title>Implementing SSO with hybris :: A Technology Journal — Notes about technology and life.</title><link href=https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css rel=stylesheet type=text/css><link rel=stylesheet href=/main.min.7bfbbe12786fa0ded4b4c0d792cbb36a5bd0bdb0b856dde57aa7b1f6fe0f2b87.css><meta itemprop=name content="Implementing SSO with hybris"><meta itemprop=description content="This is the story of how I implemented Single Sign-On (SSO) functionality with hybris
+The Requirements When the client requested us to implement SSO functionality with hybris there didn&rsquo;t provide much details besides the Identity Provider (IdP) of choice, which was Okta. The client had already implemented SSO for other applications (namely Widen, a cloud base DAM), and given that there was zero experience doing this with hybris we were somehow convinced that it was an easy feature to implement (mistake #1)."><meta itemprop=datePublished content="2015-10-20T10:50:03-07:00"><meta itemprop=dateModified content="2015-10-20T10:50:03-07:00"><meta itemprop=wordCount content="1684"><meta itemprop=keywords content="hybris,SSO,SAML,Okta,Single Sign-On,"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://danvalencia.github.io/"><meta name=twitter:title content="Implementing SSO with hybris"><meta name=twitter:description content="This is the story of how I implemented Single Sign-On (SSO) functionality with hybris
+The Requirements When the client requested us to implement SSO functionality with hybris there didn&rsquo;t provide much details besides the Identity Provider (IdP) of choice, which was Okta. The client had already implemented SSO for other applications (namely Widen, a cloud base DAM), and given that there was zero experience doing this with hybris we were somehow convinced that it was an easy feature to implement (mistake #1)."><meta property="article:published_time" content="2015-10-20 10:50:03 -0700 -0700"></head><body><div class=container><header class=header><span class=header__inner><a href=/ style=text-decoration:none><div class=logo><span class=logo__mark>></span>
+<span class=logo__text>cd ~</span>
+<span class=logo__cursor></span></div></a><span class=header__right><nav class=menu><ul class=menu__inner><li><a href=https://danvalencia.github.io/about/me>About</a></li><li><a href=https://danvalencia.github.io/articles>Blog</a></li></ul></nav><span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></span><span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 41C32.4934 41 41 32.4934 41 22 41 11.5066 32.4934 3 22 3 11.5066 3 3 11.5066 3 22s8.5066 19 19 19zM7 22C7 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22z"/></svg></span></span></span></header><div class=content><main class=post><div class=post-info></p></div><article><h2 class=post-title><a href=https://danvalencia.github.io/articles/implementing_sso_with_hybris/>Implementing SSO with hybris</a></h2><div class=post-content><p>This is the story of how I implemented Single Sign-On (SSO) functionality with <a href=https://www.hybris.com/en/>hybris</a></p><h3 id=the-requirements>The Requirements</h3><p>When the client requested us to implement SSO functionality with hybris there didn&rsquo;t provide much details besides the Identity Provider (IdP) of choice, which was <a href=http://okta.com>Okta</a>. The client had already implemented SSO for other applications (namely <a href=http://widen.com>Widen</a>, a cloud base DAM), and given that there was zero experience doing this with hybris we were somehow convinced that it was an easy feature to implement (mistake #1).</p><p>After digging around and asking some more questions, we concluded that we needed to implement the following features:
+- Enable IdP initiated SSO functionality for all hybris cockpits.
+- We must have feature toggling enabled for SSO, as we want to choose the environments that should have SSO. For example, local dev environments, CI environment should have SSO toggled off.
+- User/group information lived in Active Directory and would be handled solely by the IT department.
+- No direct access to LDAP would be provided, so we couldn&rsquo;t leverage the hybris LDAP extension to sync user/group information.</p><h3 id=saml-primer>SAML Primer</h3><p>The first thing I had to do is familiarize myself with SAML (Security Assertion Markup Language), which is both a protocol and an XML based markup language.</p><p>The main concepts of SAML is that there&rsquo;s the concept of an Identity Provider (IdP), and a Service Provider (SP).</p><p>IdPs are the systems in charge of authenticating users. They typically sit in front of a directory service such as Active Directory or LDAP. SPs are the applications that are secured with the SSO solution. In this case, hybris is the SP and Okta is the IdP.</p><p>Authentication happens by doing a series of browser intermediated HTTP requests, with SAML payload called Assertions. The payload is encrypted using private/public key pair encryption on both ways. The following Wikipedia image depicts the flow nicely:</p><p><img src=https://upload.wikimedia.org/wikipedia/en/thumb/0/04/Saml2-browser-sso-redirect-post.png/1280px-Saml2-browser-sso-redirect-post.png></img></p><p>There are a 2 types of authentication flows:</p><ul><li>IdP initiated authentication<br></li><li>SP initiated authentication</li></ul><p>In IdP initiated authentication the users log in to the system via an IdP webpage (typically a dashboard). Upon successful authentication the user is then redirected to the SP endpoint.</p><p>In SP initiated authentication, the user goes directly to the SP login page and enters her credentials there; she then gets redirected to the IdP&rsquo;s authentication endpoint and, if access is granted, she again gets redirected back to the SP.</p><p>As you can see there&rsquo;s an extra redirect in SP initiated flow; even with that extra step the user experience can be arguably better with SP initiated flows.</p><h3 id=research>Research</h3><p>In order to even start to think about how to implement SSO in hybris I had to dig into how hybris does authentication. Now, the first thing I found out is that each hybris web extension implements its own authentication mechanism:</p><ul><li>All cockpits (i.e. not the NG Cockpits) implement authentication using Spring Security, and leveraging the same Spring Security context files, which are referenced from the <em>cockpit</em> extension under <em>classpath:cockpit/cockpit-spring-security.xml</em>.</li><li><p>In turn, every cockpit typically overrides certain spring security configuration by specifying an additional configuration file, named <em>$COCKPIT_NAME-spring-security.xml</em>, in its own classpath.</p></li><li><p>hybris storefronts also use Spring Security for authentication, although the exact implementation differs a bit from the cockpit implementation.</p></li><li><p>HAC and HMC do not use Spring Security, so SSO needs to be implemented in a different way.</p></li></ul><h3 id=spring-security-primer>Spring Security Primer</h3><p>There&rsquo;s 2 things you need to setup initially for enabling Spring Security for your web application:
+1. First, you need to setup your context file via a context-param. For example, the <em>productcockpit</em> extension&rsquo;s spring configuration is setup in the following way:</p><pre><code class=language-xml>  &lt;context-param&gt;
+    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+    &lt;param-value&gt;
+      classpath:productcockpit/productcockpit-spring-configs.xml
+    &lt;/param-value&gt;
+  &lt;/context-param&gt;
+</code></pre><ol><li><p>Then, you need to declare the <em>springSecurityFilter</em>, again in web.xml file, like so:</p><pre><code class=language-xml>&lt;filter&gt;
+&lt;filter-name&gt;springSecurityFilterChain&lt;/filter-name&gt;
+&lt;filter-class&gt;org.springframework.web.filter.DelegatingFilterProxy&lt;/filter-class&gt;
+&lt;/filter&gt;
+&lt;filter-mapping&gt;
+&lt;filter-name&gt;springSecurityFilterChain&lt;/filter-name&gt;
+&lt;url-pattern&gt;/*&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;
+</code></pre></li></ol><p>After setting up your <em>web.xml</em> file you should be able to configure Spring Security directly in the spring configuration file.</p><h4 id=the-most-simple-spring-security-configuration-possible>The most simple Spring Security configuration possible</h4><p>Spring makes simple things easy, and complex tasks possible; Spring Security is no exception. In its most basic form, this is how a Spring Security configuration looks like:</p><pre><code class=language-xml>  &lt;security:http auto-config=&quot;true&quot;&gt;
+    &lt;security:intercept-url pattern=&quot;/admin**&quot; access=&quot;ROLE_USER&quot; /&gt;
+  &lt;/security:http&gt;
+
+  &lt;security:authentication-manager&gt;
+    &lt;security:authentication-provider&gt;
+       &lt;security:user-service&gt;
+  	    &lt;security:user name=&quot;dvalencia&quot; password=&quot;Pssword&quot; authorities=&quot;ROLE_USER&quot; /&gt;
+      &lt;/security:user-service&gt;
+    &lt;/security:authentication-provider&gt;
+  &lt;/security:authentication-manager&gt;
+</code></pre><p>With these few lines of xml you get a lot for free:</p><ul><li>You get a login page with logout functionality.</li><li>You get a user service where you can define users and even assign roles.</li></ul><p>A few additional concepts to note here are:</p><ul><li><code>&lt;security:http&gt;</code> tag: here you can define the authenticated paths, as well as paths allowed for anonymous access, such as asset paths, or login pages. You may declare have multiple <code>&lt;security:http&gt;</code> configurations.</li><li><code>&lt;security:authentication-manager&gt;</code> tag: This is where the magic happens; inside this tag is where you define an <em>authentication-provider</em>, which is the main point of extension for Spring Security. In this example we&rsquo;re simply declaring default <em>authentication-manager</em> and <em>authentication-provider</em>.</li></ul><h3 id=spring-security-saml>Spring Security SAML</h3><p>Everything&rsquo;s all fine and dandy with the basic Spring Security sample. It get&rsquo;s much more interesting (and kind of confusing to be honest) when using the <a href=http://projects.spring.io/spring-security-saml/>Spring Security SAML extension</a>. The documentation is pretty comprehensive to be fair, but there&rsquo;s so many concepts to understand that it can become very daunting.</p><p>The good thing is that there&rsquo;s a <a href=http://developer.okta.com/docs/guides/spring_security_saml.html>great Okta + Spring Security SAML sample project</a> which is exactly what I was looking for. So in order to implement the hybris SSO integration it was just a matter of configuring the cockpits to use the same approach as the sample app.</p><h3 id=hybris-security-and-spring-security-saml>hybris security and Spring Security SAML</h3><p>As I mentioned in the beginning of this post, one of the key requirements was to have the ability to turn on/off SSO by using some sort of configuration. This would mean that I would need to be able to support 2 authentication mechanisms:</p><ul><li>hybris OOTB authentication</li><li>SAML authentication</li></ul><p>The <code>&lt;security:http&gt;</code> and <code>&lt;authentication-manager&gt;</code> configurations for hybris cockpits looks like this:</p><pre><code class=language-xml>&lt;security:http  access-denied-page=&quot;/accessDenied.zul&quot;&gt;
+    &lt;security:session-management session-authentication-strategy-ref=&quot;fixation&quot; /&gt;
+    &lt;security:anonymous key=&quot;cockpitAnonymous&quot; username=&quot;anonymousUser&quot; granted-authority=&quot;ROLE_ANONYMOUS&quot; /&gt;
+    &lt;security:intercept-url pattern=&quot;/login.zul&quot; access=&quot;IS_AUTHENTICATED_ANONYMOUSLY&quot; /&gt;
+    &lt;security:intercept-url pattern=&quot;/zkau/**&quot; access=&quot;IS_AUTHENTICATED_ANONYMOUSLY&quot; /&gt;
+    &lt;security:intercept-url pattern=&quot;/**&quot; access=&quot;IS_AUTHENTICATED_REMEMBERED&quot; /&gt;
+    &lt;security:remember-me services-ref=&quot;rememberMeServices&quot; key=&quot;cockpit&quot; /&gt;
+    &lt;security:logout logout-success-url=&quot;/index.zul&quot; /&gt;
+
+    &lt;security:form-login always-use-default-target=&quot;false&quot; login-page=&quot;/login.zul&quot; authentication-failure-url=&quot;/login.zul?login_error=1&quot; /&gt;
+&lt;/security:http&gt;
+
+&lt;security:authentication-manager alias=&quot;authenticationManager&quot;&gt;
+    &lt;!-- Register authentication manager for SAML provider --&gt;
+    &lt;security:authentication-provider ref=&quot;coreAuthenticationProvider&quot;/&gt;
+&lt;/security:authentication-manager&gt;
+
+&lt;bean id=&quot;coreAuthenticationProvider&quot; class=&quot;de.hybris.platform.cockpit.security.CockpitAuthenticationProvider&quot;&gt;
+    &lt;property name=&quot;preAuthenticationChecks&quot; ref=&quot;corePreAuthenticationChecks&quot; /&gt;
+    &lt;property name=&quot;userDetailsService&quot; ref=&quot;coreUserDetailsService&quot; /&gt;
+&lt;/bean&gt;
+</code></pre><p>The SAML version of the above hybris configuration looks like this:</p><pre><code class=language-xml>&lt;security:http entry-point-ref=&quot;samlEntryPoint&quot; use-expressions=&quot;false&quot;&gt;
+    &lt;security:intercept-url pattern=&quot;/zkau/**&quot; access=&quot;IS_AUTHENTICATED_ANONYMOUSLY&quot; /&gt;
+    &lt;security:custom-filter before=&quot;FIRST&quot; ref=&quot;metadataGeneratorFilter&quot;/&gt;
+    &lt;security:custom-filter after=&quot;BASIC_AUTH_FILTER&quot; ref=&quot;samlFilter&quot;/&gt;
+    &lt;security:intercept-url pattern=&quot;/**&quot; access=&quot;IS_AUTHENTICATED_FULLY&quot;/&gt;
+    &lt;security:logout success-handler-ref=&quot;successLogoutHandler&quot; /&gt;
+&lt;/security:http&gt;
+
+&lt;security:authentication-manager alias=&quot;authenticationManager&quot;&gt;
+    &lt;!-- Register authentication manager for SAML provider --&gt;
+    &lt;security:authentication-provider ref=&quot;samlAuthenticationProvider&quot;/&gt;
+&lt;/security:authentication-manager&gt;
+
+&lt;!-- SAML Authentication Provider responsible for validating of received SAML messages --&gt;
+&lt;bean id=&quot;samlAuthenticationProvider&quot; class=&quot;org.springframework.security.saml.SAMLAuthenticationProvider&quot; /&gt;
+</code></pre><p>Contrasting these 2 configurations and after testing things out more than once I came to the following conclusions:</p><ul><li>I needed to have a way to turn on/off <code>&lt;security:http&gt;</code> configurations based on a property.</li><li>I needed to be able to have two <code>authentication-provider</code>s: one for hybris auth and another one for SAML auth.</li><li>Additionally our <code>authentication-manager</code> would need to
+choose the correct <code>authentication-provider</code> based on the same property.</li></ul><p>We were already using <a href=https://github.com/tacitknowledge/flip>Flip</a> as a feature toggle framework, so it made sense to use this for switching SSO on and off as well.</p><p>After a lot more investigation I found that one could add a reference to a <a href=http://docs.spring.io/spring-security/site/docs/3.1.x/apidocs/org/springframework/security/web/util/RequestMatcher.html>RequestMatcher</a> to the <code>&lt;security:http&gt;</code> configuration. I could then use the RequestMatcher to enable or disable each one of the <code>&lt;security:http&gt;</code> configs.
+I created the following implementation of a RequestMatcher:</p><pre><code class=language-java>public class SstSecurityRequestMatcher implements RequestMatcher {
+    @Resource
+    private FeatureService featureService;
+
+    private boolean negateValue;
+
+    @Override
+    public boolean matches(HttpServletRequest httpServletRequest)
+    {
+        boolean featureEnabled = featureService.isFeatureEnabled(Features.COCKPIT_SSO);
+
+        if (negateValue)
+        {
+            featureEnabled = !featureEnabled;
+        }
+
+        return featureEnabled;
+    }
+
+    public void setNegateValue(boolean negateValue)
+    {
+        this.negateValue = negateValue;
+    }
+}
+</code></pre><p>Then, I created two <code>RequestMatcher</code> bean definitions:</p><pre><code class=language-xml>&lt;!-- This one is to enable the SAML http security --&gt;
+&lt;bean id=&quot;samlSecurityRequestMatcher&quot; class=&quot;com.sst.core.security.SstSecurityRequestMatcher&quot; /&gt;
+
+&lt;!-- This other one is a negated version of the RequestMatcher for enabling the hybris OOTB security--&gt;
+&lt;bean id=&quot;hybrisSecurityRequestMatcher&quot; class=&quot;com.sst.core.security.SstSecurityRequestMatcher&quot; &gt;
+    &lt;property name=&quot;negateValue&quot; value=&quot;true&quot; /&gt;
+&lt;/bean&gt;
+</code></pre><p>With these beans in place I proceeded to configure the <code>request-matcher-ref</code> for both of my <code>&lt;http:security&gt;</code> configurations:</p><pre><code class=language-xml>&lt;!-- hybris OOTB Security Configuration --&gt;
+&lt;security:http  request-matcher-ref=&quot;hybrisSecurityRequestMatcher&quot; access-denied-page=&quot;/accessDenied.zul&quot;&gt;
+    &lt;security:session-management session-authentication-strategy-ref=&quot;fixation&quot; /&gt;
+    &lt;security:anonymous key=&quot;cockpitAnonymous&quot; username=&quot;anonymousUser&quot; granted-authority=&quot;ROLE_ANONYMOUS&quot; /&gt;
+    &lt;security:intercept-url pattern=&quot;/login.zul&quot; access=&quot;IS_AUTHENTICATED_ANONYMOUSLY&quot; /&gt;
+    &lt;security:intercept-url pattern=&quot;/zkau/**&quot; access=&quot;IS_AUTHENTICATED_ANONYMOUSLY&quot; /&gt;
+    &lt;security:intercept-url pattern=&quot;/**&quot; access=&quot;IS_AUTHENTICATED_REMEMBERED&quot; /&gt;
+    &lt;security:remember-me services-ref=&quot;rememberMeServices&quot; key=&quot;cockpit&quot; /&gt;
+    &lt;security:logout logout-success-url=&quot;/index.zul&quot; /&gt;
+    &lt;security:form-login always-use-default-target=&quot;false&quot; login-page=&quot;/login.zul&quot; authentication-failure-url=&quot;/login.zul?login_error=1&quot; /&gt;
+&lt;/security:http&gt;
+
+&lt;!--Secured pages with SAML as entry point --&gt;
+&lt;security:http request-matcher-ref=&quot;samlSecurityRequestMatcher&quot; entry-point-ref=&quot;samlEntryPoint&quot; use-expressions=&quot;false&quot;&gt;
+    &lt;security:intercept-url pattern=&quot;/zkau/**&quot; access=&quot;IS_AUTHENTICATED_ANONYMOUSLY&quot; /&gt;
+    &lt;security:custom-filter before=&quot;FIRST&quot; ref=&quot;metadataGeneratorFilter&quot;/&gt;
+    &lt;security:custom-filter after=&quot;BASIC_AUTH_FILTER&quot; ref=&quot;samlFilter&quot;/&gt;
+    &lt;security:intercept-url pattern=&quot;/**&quot; access=&quot;IS_AUTHENTICATED_FULLY&quot;/&gt;
+    &lt;security:logout success-handler-ref=&quot;successLogoutHandler&quot; /&gt;
+&lt;/security:http&gt;
+</code></pre><p>With these <code>request-matcher-ref</code>s and using my feature toggle framework I was able to have both auth configurations in place, but only one of them active at a time.</p><p>The next step was to figure out a way to use the same feature toggle to configure the correct <code>AuthenticationProvider</code>. I solved this by using a Spring factory bean, which would contain a reference to both the hybris and SSO <code>AuthenticationProvider</code>s. I used the same feature toggle to return the right bean:</p><pre><code class=language-java>public class SstAuthenticationProviderFactory
+{
+   @Resource
+   private FeatureService featureService;
+
+   @Resource
+   private AuthenticationProvider coreAuthenticationProvider;
+
+   @Resource
+   private AuthenticationProvider samlAuthenticationProvider;
+
+   public AuthenticationProvider createInstance()
+   {
+       if (featureService.isFeatureEnabled(Features.COCKPIT_SSO))
+       {
+           return samlAuthenticationProvider;
+       } else
+       {
+           return coreAuthenticationProvider;
+       }
+   }
+}
+</code></pre><p>And I declared both <code>AuthenticationProvider</code>s and the <code>SstAuthenticationProviderFactory</code> factory beans in the following way:</p><pre><code class=language-xml>&lt;!-- This bean acts like a single bean, and with the factory-bean and factory-method attributes
+     it will return the right instance based on our feature toggle--&gt;
+&lt;bean id=&quot;authenticationProvider&quot; factory-bean=&quot;authenticationProviderFactory&quot; factory-method=&quot;createInstance&quot;/&gt;
+
+&lt;!-- We declare our factory bean here, it gets wired by Spring annotations --&gt;
+&lt;bean id=&quot;authenticationProviderFactory&quot; class=&quot;com.sst.core.security.SstAuthenticationProviderFactory&quot;/&gt;
+
+&lt;!-- SAML Authentication Provider responsible for validating of received SAML messages --&gt;
+&lt;bean id=&quot;samlAuthenticationProvider&quot; class=&quot;com.sst.core.security.SstSAMLAuthenticationProvider&quot; /&gt;
+
+&lt;!-- hybris OOTB Authentication Provider--&gt;
+&lt;bean id=&quot;coreAuthenticationProvider&quot; class=&quot;de.hybris.platform.cockpit.security.CockpitAuthenticationProvider&quot;&gt;
+    &lt;property name=&quot;preAuthenticationChecks&quot; ref=&quot;corePreAuthenticationChecks&quot; /&gt;
+    &lt;property name=&quot;userDetailsService&quot; ref=&quot;coreUserDetailsService&quot; /&gt;
+&lt;/bean&gt;
+</code></pre><p>With those 2 changes in place, I was able to switch between normal authentication and SAML authentication.</p><h3 id=conclusion>Conclusion</h3><p>Spring Security is a very powerful framework that handles virtually every possible imaginable scenario. As such, it takes a non-trivial amount of time to understand its concepts. Coupled with the complexity of the hybris platform, it can become a daunting task to customize according to your needs.</p></div></article><hr><div class=post-info><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83.0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://danvalencia.github.io/tags/hybris>hybris</a></span><span class=tag><a href=https://danvalencia.github.io/tags/sso>SSO</a></span><span class=tag><a href=https://danvalencia.github.io/tags/saml>SAML</a></span><span class=tag><a href=https://danvalencia.github.io/tags/okta>Okta</a></span><span class=tag><a href=https://danvalencia.github.io/tags/single-sign-on>Single Sign-On</a></span></p></div></main></div><footer class=footer><div class=footer__inner><div class=footer__content><span>&copy; 2019</span>
+<span></span><span><a href=https://danvalencia.github.io/posts/index.xml target=_blank title=rss><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg></a></span></div></div><div class=footer__inner><div class=footer__content><span>Powered by <a href=http://gohugo.io>Hugo</a></span>
+<span>Made with &#10084; by <a href=https://github.com/rhazdon>rhazdon</a></span></div></div></footer></div><script type=text/javascript src=/bundle.min.2d5469329143160ae2456a69c3c76dc2d0a3b212b46afe291a51bd68650ed6f8697e001dab54f1c272c77ce08092a8c55e5bb4314e0ee334aab4b927ec896638.js integrity="sha512-LVRpMpFDFgriRWppw8dtwtCjshK0av4pGlG9aGUO1vhpfgAdq1TxwnLHfOCAkqjFXlu0MU4O4zSqtLkn7IlmOA=="></script></body></html>
