@@ -7,7 +7,7 @@ tags: ["tutorials", "github actions", "writing"]
 images:
 ---
 
-I've had this website for 6 years now. Like any piece of software, a website needs constant care and things end up breaking if you abandon it. In this post I'll discuss how I automated my site's build using Github Actions.
+I've had this website for 6 years now. Like any piece of software, a website needs constant care and things end up breaking if you abandon it. In this post I'll discuss how I revamped my site and automated my site's build using Github Actions.
 
 ## The original setup 
 
