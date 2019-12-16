@@ -137,6 +137,9 @@ With Github Actions in place, my writing flow works is now as simple as:
   - Commit and push the article:  
     `git add . && git commit -m "My new article" && git push origin author` 
 
+See it in _Action_:  
+  ![Github Actions in Action][3]  
+ 
 Now I can focus 100% on writing and let Github do the rest! Thanks for reading!
 
 
@@ -146,3 +149,4 @@ Now I can focus 100% on writing and let Github do the rest! Thanks for reading!
 
   [1]: https://s3.amazonaws.com/danvalencia_my_site/github_secrets.png
   [2]: https://s3.amazonaws.com/danvalencia_my_site/github_deploy_keys.png
+  [3]: https://s3.amazonaws.com/danvalencia_my_site/github_actions_in_action.png
