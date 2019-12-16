@@ -1,5 +1,5 @@
 ---
-title: "Setting up my website with Github Actions"
+title: "Automating my website build with Github Actions"
 date: 2019-12-13T13:55:20-08:00
 draft: false
 comments: false
