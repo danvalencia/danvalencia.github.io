@@ -140,7 +140,9 @@ With Github Actions in place, my writing flow works is now as simple as:
 See it in _Action_:  
   ![Github Actions in Action][3]  
  
-Now I can focus 100% on writing and let Github do the rest! Thanks for reading!
+Now I can focus 100% on writing and let Github do the rest!  
+
+Thanks for reading!
 
 
 ## References
