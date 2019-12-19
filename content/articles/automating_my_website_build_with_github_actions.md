@@ -18,10 +18,10 @@ In Hugo, the content - written in Markdown - is stored under a directory called 
 When I originally setup this blog I didn't have a CI process in place for building it, so I ended up having 2 repositories: one where I kept all the Hugo structure and the content and a separate repository for the published site. 
 
 With this approach I had to:  
-  - Build the site (with `hugo` command).  
-  - Copy over the contents of the `/public` directory to the published site repo.  
-  - Commit my changes in both repos.  
-  - Finally, push to Github. 
+  * Build the site (with `hugo` command).  
+  * Copy over the contents of the `/public` directory to the published site repo.  
+  * Commit my changes in both repos.  
+  * Finally, push to Github. 
 
 This worked ok for a while, but every article I wanted to write required too many steps, and it quickly got old, resulting in me writing less and less, to the point of abandoning my blog altogether. 
 
@@ -106,10 +106,10 @@ jobs:
 ```
 
 The steps are mostly self explanatory. In laymans terms:    
-  - Checkout the repo, with submodules.  
-  - Install Hugo version '0.59.1'.  
-  - Run the build with `hugo --minify`.  
-  - Deploy the site by pushing the `./public` directory to the `master` branch.
+  * Checkout the repo, with submodules.  
+  * Install Hugo version '0.59.1'.  
+  * Run the build with `hugo --minify`.  
+  * Deploy the site by pushing the `./public` directory to the `master` branch.
 
 That's it!
 
@@ -120,21 +120,23 @@ One thing I'd like to point out is the use of `${{ secrets.ACTIONS_DEPLOY_KEY }}
 This is the secret that Github Actions will use to push to a repo. In this case we're _pushing_ to the current repo, which means that the secret needs to have write permissions to the repo.
 
 How can you create one, you may ask ? Glad you asked:  
-- First step is to create an SSH key. From a Mac:  
+
+* First step is to create an SSH key. From a Mac:  
   `ssh-keygen -t rsa -b 4096 -C "youremail@foo.com" -f mysite`  
   This command will create a public and private key pair named _mysite.pub_ and _mysite_, accordingly.  
-- Copy the _private_ key (e.g. `pbcopy < mysite`) and create a secret named _ACTIONS_DEPLOY_KEY_ from the repo's _Settings_ page:  
+* Copy the _private_ key (e.g. `pbcopy < mysite`) and create a secret named _ACTIONS\_DEPLOY\_KEY_ from the repo's _Settings_ page:  
   ![Github Secrets][1]  
-- Copy the _public_ key (e.g. `pbcopy < mysite.pub`) and create a deploy key named _ACTIONS_DEPLOY_KEY_ from the repo's _Settings_ page:  
+* Copy the _public_ key (e.g. `pbcopy < mysite.pub`) and create a deploy key named _ACTIONS\_DEPLOY\_KEY_ from the repo's _Settings_ page:  
   ![Github Secrets][2]  
   Make sure you check the _Allow write access_ checkbox.
   - Once the deploy key is created you should be able to use it in Github Actions. 
 
 ## Putting it all together  
 With Github Actions in place, my writing flow works is now as simple as:  
-- Create a new article with `hugo new content/articles/my_awesome_new_article.md`.  
-- Write the article.  
-- Commit and push the article:  
+
+* Create a new article with `hugo new content/articles/my_awesome_new_article.md`.  
+* Write the article.  
+* Commit and push the article:  
   `git add . && git commit -m "My new article" && git push origin author` 
 
 See it in _Action_:  
@@ -146,7 +148,7 @@ Thanks for reading!
 
 
 ## References
-- Hugo Github Action: https://github.com/peaceiris/actions-hugo.   
+* Hugo Github Action: https://github.com/peaceiris/actions-hugo.   
 
 
   [1]: https://s3.amazonaws.com/danvalencia_my_site/github_secrets.png
