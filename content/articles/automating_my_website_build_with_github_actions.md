@@ -106,7 +106,8 @@ jobs:
         PUBLISH_DIR: ./public
 ```
 
-The steps are mostly self explanatory. In laymans terms:    
+The steps are mostly self explanatory. In laymans terms:  
+
 * Checkout the repo, with submodules.  
 * Install Hugo version '0.59.1'.  
 * Run the build with `hugo --minify`.  
