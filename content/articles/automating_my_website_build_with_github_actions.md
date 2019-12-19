@@ -18,10 +18,11 @@ In Hugo, the content - written in Markdown - is stored under a directory called 
 When I originally setup this blog I didn't have a CI process in place for building it, so I ended up having 2 repositories: one where I kept all the Hugo structure and the content and a separate repository for the published site. 
 
 With this approach I had to:  
-  * Build the site (with `hugo` command).  
-  * Copy over the contents of the `/public` directory to the published site repo.  
-  * Commit my changes in both repos.  
-  * Finally, push to Github. 
+
+* Build the site (with `hugo` command).  
+* Copy over the contents of the `/public` directory to the published site repo.  
+* Commit my changes in both repos.  
+* Finally, push to Github. 
 
 This worked ok for a while, but every article I wanted to write required too many steps, and it quickly got old, resulting in me writing less and less, to the point of abandoning my blog altogether. 
 
@@ -32,8 +33,8 @@ Recently, I've felt the need to write more, so I decided to fix this issue and r
 Github Pages is a feature from Github that allows to host a static HTML site under any repository. This is very useful if you want to host the documentation of your project alongside the code, for example. 
 
 In the context of Github Pages there are 2 kinds of repos:
-- Personal or Organization repositories: the name of the repo should be _\<user-or-org\>_.github.io. GH Pages sites built from a personal or org repo are published from the master branch by default.
-- Project repositories: they can have any name. GH Pages sites built from a project repo are published by default from the _gh-pages_ branch. 
+* Personal or Organization repositories: the name of the repo should be _\<user-or-org\>_.github.io. GH Pages sites built from a personal or org repo are published from the master branch by default.
+* Project repositories: they can have any name. GH Pages sites built from a project repo are published by default from the _gh-pages_ branch. 
 
 Given that mine is personal site I created the _danvalencia.github.io_ repo. 
 
@@ -106,10 +107,10 @@ jobs:
 ```
 
 The steps are mostly self explanatory. In laymans terms:    
-  * Checkout the repo, with submodules.  
-  * Install Hugo version '0.59.1'.  
-  * Run the build with `hugo --minify`.  
-  * Deploy the site by pushing the `./public` directory to the `master` branch.
+* Checkout the repo, with submodules.  
+* Install Hugo version '0.59.1'.  
+* Run the build with `hugo --minify`.  
+* Deploy the site by pushing the `./public` directory to the `master` branch.
 
 That's it!
 
