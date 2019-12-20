@@ -7,6 +7,6 @@ I'd say curiosity is one of my biggest strengths, and that has helped me get inv
 
 ### Side Projects  
 
-I've been involved in a number of interesting side projects. Most notably I participated on a Burning Man art installation ([Hands by Dave Gertler](http://www.rollingstone.com/culture/pictures/burning-man-2013-the-people-20130905/stiltwalkers-0795928)). I worked on the wiring and installation for the ligthing and was in charge of writing the firmware.  I also wrote an iPad app for controlling the LEDs using bluetooth technology.  You can read more about that on my <a href="/articles/hands_(part_i)">blog posts</a>.  
+I've been involved in a number of interesting side projects. Most notably I participated on a Burning Man art installation ([Hands by Dave Gertler](http://www.rollingstone.com/culture/pictures/burning-man-2013-the-people-20130905/stiltwalkers-0795928)). I worked on the wiring and installation for the ligthing and was in charge of writing the firmware.  I also wrote an iPad app for controlling the LEDs using bluetooth technology.  You can read more about that on my <a href="articles/hands_part_1/">blog post</a>.  
 
 **[Click here to view my full resume](/about/resume)**
