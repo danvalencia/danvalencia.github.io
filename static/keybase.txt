@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/danvalencia
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://danvalencia.dev
+  * I am danvalencia (https://keybase.io/danvalencia) on keybase.
+  * I have a public key ASDSrzfyP85D0t1HelVZc9I7BWF8jhjtx6FnYz-hYmFfKAo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0120d2af37f23fce43d2dd477a555973d23b05617c8e18edc7a167633fa162615f280a",
+      "host": "keybase.io",
+      "kid": "0120d2af37f23fce43d2dd477a555973d23b05617c8e18edc7a167633fa162615f280a",
+      "uid": "42acda29ed8e279f3ad4c129bfc18019",
+      "username": "danvalencia"
+    },
+    "merkle_root": {
+      "ctime": 1576892945,
+      "hash": "b98f6562b2db7fa04c6bb01dd1c13dc276e9003770b071d54ebc7e89fc2d0c586a00f1ab486f27477fa94784efddef237f82c18e40e8b778c59bb971ca369f60",
+      "hash_meta": "0d99afc4971bd5b86f140dc52d5d26b5ab46a23131e1b7545850ac0b59e3c92c",
+      "seqno": 13870513
+    },
+    "service": {
+      "entropy": "MW4BWnfXJuA3NhJO1nhmDcpV",
+      "hostname": "danvalencia.dev",
+      "protocol": "http:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "5.1.1"
+  },
+  "ctime": 1576892954,
+  "expire_in": 504576000,
+  "prev": "1e527ef0fd00b0711076c119fd96bb5846fe73b4d2543b3fb63da1543bb146f1",
+  "seqno": 22,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEg0q838j/OQ9LdR3pVWXPSOwVhfI4Y7cehZ2M/oWJhXygKp3BheWxvYWTESpcCFsQgHlJ+8P0AsHEQdsEZ/Za7WEb+c7TSVDs/tj2hVDuxRvHEILDJMSmSv99bwrdTUPUJAoZQjfMijRU6XoRQ4FhgzzCgAgHCo3NpZ8RAPT0S0WcjpGj9QLPzLBvzenXu4Tidc/luSw4I2HsePWOlofZhA95ZEleM7XuvCU+mHPgY55y97umSeLGFrJvSDahzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEICpjik8QPWNj7Hc9XvyTTwXTepjhTq5TBkIRw4eABcfmo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/danvalencia
+
+==================================================================
