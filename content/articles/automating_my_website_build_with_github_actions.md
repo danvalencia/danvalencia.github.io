@@ -68,7 +68,7 @@ Like most configurations nowadays, Github Actions workflows are defined with YAM
 
 A workflow gets triggered by an event, such as a push or pull request creation. In the following example the workflow get's triggered on a _push_ event from the _author_ branch:
 
-```
+```yaml
 on:
   push:
     branches:
@@ -76,7 +76,7 @@ on:
 ```
 
 Then you specify jobs that need to run for this workflow. For each job you specify the docker image to use, like so:
-```
+```yaml
 jobs:
   build-deploy:
     runs-on: ubuntu-18.04
@@ -84,7 +84,7 @@ jobs:
 
  Now you specify a list of steps to run, which can be external actions or scripts:
 
-```
+```yaml
     steps:
     - uses: actions/checkout@v1
       with:
