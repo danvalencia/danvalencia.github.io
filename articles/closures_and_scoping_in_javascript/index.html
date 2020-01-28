@@ -2,94 +2,84 @@
  &amp;hellip; a function or reference to a function together with a referencing environment—a table storing a reference to each of the non-local variables (also called free variables) of that function.
  I want you to pay special attention to the last part of that definition: together with a referencing environment, containing references to each of the non-local variables of that function. This is easier explained with a little code:"><meta name=keywords content><meta name=robots content="noodp"><meta name=theme-color content><link rel=canonical href=https://www.danvalencia.dev/articles/closures_and_scoping_in_javascript/><title>Closures and Scoping in Javascript :: A Technology Journal — Notes about technology and life.</title><link href=https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.2.1/css/flag-icon.min.css rel=stylesheet type=text/css><link rel=stylesheet href=/main.min.7bfbbe12786fa0ded4b4c0d792cbb36a5bd0bdb0b856dde57aa7b1f6fe0f2b87.css><meta itemprop=name content="Closures and Scoping in Javascript"><meta itemprop=description content="Per Wikipedia, a Closure is:
  &hellip; a function or reference to a function together with a referencing environment—a table storing a reference to each of the non-local variables (also called free variables) of that function.
- I want you to pay special attention to the last part of that definition: together with a referencing environment, containing references to each of the non-local variables of that function. This is easier explained with a little code:"><meta itemprop=datePublished content="2013-02-02T10:53:43-07:00"><meta itemprop=dateModified content="2013-02-02T10:53:43-07:00"><meta itemprop=wordCount content="933"><meta itemprop=keywords content="javascript,"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.danvalencia.dev/"><meta name=twitter:title content="Closures and Scoping in Javascript"><meta name=twitter:description content="Per Wikipedia, a Closure is:
+ I want you to pay special attention to the last part of that definition: together with a referencing environment, containing references to each of the non-local variables of that function. This is easier explained with a little code:"><meta itemprop=datePublished content="2013-02-02T10:53:43-07:00"><meta itemprop=dateModified content="2013-02-02T10:53:43-07:00"><meta itemprop=wordCount content="1024"><meta itemprop=keywords content="javascript,"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://www.danvalencia.dev/"><meta name=twitter:title content="Closures and Scoping in Javascript"><meta name=twitter:description content="Per Wikipedia, a Closure is:
  &hellip; a function or reference to a function together with a referencing environment—a table storing a reference to each of the non-local variables (also called free variables) of that function.
  I want you to pay special attention to the last part of that definition: together with a referencing environment, containing references to each of the non-local variables of that function. This is easier explained with a little code:"><meta property="article:published_time" content="2013-02-02 10:53:43 -0700 -0700"></head><body><div class=container><header class=header><span class=header__inner><a href=/ style=text-decoration:none><div class=logo><span class=logo__mark>></span>
 <span class=logo__text>cd ~</span>
-<span class=logo__cursor></span></div></a><span class=header__right><nav class=menu><ul class=menu__inner><li><a href=https://www.danvalencia.dev/about/me>About</a></li><li><a href=https://www.danvalencia.dev/articles>Articles</a></li><li><a href=https://www.danvalencia.dev/recipes>Recipes</a></li></ul></nav><span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></span><span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 41C32.4934 41 41 32.4934 41 22 41 11.5066 32.4934 3 22 3 11.5066 3 3 11.5066 3 22s8.5066 19 19 19zM7 22C7 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22z"/></svg></span></span></span></header><div class=content><main class=post><div class=post-info></p></div><article><h2 class=post-title><a href=https://www.danvalencia.dev/articles/closures_and_scoping_in_javascript/>Closures and Scoping in Javascript</a></h2><div class=post-content><p>Per Wikipedia, a Closure is:</p><blockquote><p>&hellip; a function or reference to a function together with a referencing environment—a table storing a reference to each of the non-local variables (also called free variables) of that function.</p></blockquote><p>I want you to pay special attention to the last part of that definition: <strong><em>together with a referencing environment, containing references to each of the non-local variables of that function</em></strong>. This is easier explained with a little code:</p><pre class="brush: js">
-     function closureTest() {
-          var outerVar = "World";
-          document.onload = function() {
-               console.log("Hello" + outerVar);
+<span class=logo__cursor></span></div></a><span class=header__right><nav class=menu><ul class=menu__inner><li><a href=https://www.danvalencia.dev/about/me>About</a></li><li><a href=https://www.danvalencia.dev/articles>Articles</a></li><li><a href=https://www.danvalencia.dev/recipes>Recipes</a></li></ul></nav><span class=menu-trigger><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></span><span class="theme-toggle unselectable"><svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 41C32.4934 41 41 32.4934 41 22 41 11.5066 32.4934 3 22 3 11.5066 3 3 11.5066 3 22s8.5066 19 19 19zM7 22C7 13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22z"/></svg></span></span></span></header><div class=content><main class=post><div class=post-info></p></div><article><h2 class=post-title><a href=https://www.danvalencia.dev/articles/closures_and_scoping_in_javascript/>Closures and Scoping in Javascript</a></h2><div class=post-content><p>Per Wikipedia, a Closure is:</p><blockquote><p>&hellip; a function or reference to a function together with a referencing environment—a table storing a reference to each of the non-local variables (also called free variables) of that function.</p></blockquote><p>I want you to pay special attention to the last part of that definition: <strong><em>together with a referencing environment, containing references to each of the non-local variables of that function</em></strong>. This is easier explained with a little code:</p><pre><code class=language-js>function closureTest() {
+     var outerVar = &quot;World&quot;;
+     document.onload = function() {
+          console.log(&quot;Hello&quot; + outerVar);
+     }
+}
+</code></pre><p>In this example, the <em>referencing environment</em> corresponds to the <em>outerVar</em> variable, and the closure is the function that&rsquo;s assigned to the <em>document.onload</em> event property. The result of this example is a &ldquo;Hello World&rdquo; message printed in the console when the document is loaded.</p><p>You might not be impressed by any of this, as this is a pretty trivial example. The interesting thing to understand about closures lies not so much in the ability to treat functions as variables, but rather in the context (or <em>referencing environment</em>) that these functions can <em>reference</em> in a future point in time.</p><h3 id=a-true-story-about-closures>A True Story about Closures</h3><p>The other day, as I was pair programming with my coworker, we ran into an issue which led us to a deeper understanding of how Javascript handles closures . The task at hand was a mini library for managing analytics events for a <em>HTML5</em> mobile app. Each analytics event is triggered by a DOM event (e.g. <em>click</em>) and can have 1 or more <em>attributes</em> associated with it. For example, these are the attributes associated with the <em>modelTap</em> event:</p><pre><code class=language-js>{
+     'navigationCategory' : 'popular',
+     'model' : 'myModel'
+}
+</code></pre><p>Simple stuff. The tricky part is that, different <em>events</em> may contain different type of <em>attributes</em>, and these <em>attributes</em> need to be populated from different parts of the DOM. We solved this is by creating an <em>array</em> of analytic configuration objects, containing the following properties:</p><ul><li><strong><em>eventName</em></strong>, a <em>String</em>,</li><li>a CSS <strong><em>selector</em></strong>, a <em>String</em>,</li><li>and a <strong><em>getAttributes</em></strong> <em>Function</em> that returns a Javascript object with the attributes for this event.</li></ul><p>For example:</p><pre><code class=language-js>var analyticConfigs = [
+     {
+          eventName: 'modelTap',
+          selector: 'li.model',
+          getAttributes: function(context) {
+               var model = $(context).text();
+               var navigationCategory = $(context).find('#category').text();
+               return {model: model, navigationCategory: navigationCategory};
+          }
+     },
+     {
+          eventName: 'navTap',
+          selector: 'li.navigation_tab',
+          getAttributes: function(context) {
+               var tabName = $(context).text();
+               return {tabName: tabName};
           }
      }
-</pre>In this example, the _referencing environment_ corresponds to the _outerVar_ variable, and the closure is the function that's assigned to the _document.onload_ event property. The result of this example is a "Hello World" message printed in the console when the document is loaded.
-You might not be impressed by any of this, as this is a pretty trivial example. The interesting thing to understand about closures lies not so much in the ability to treat functions as variables, but rather in the context (or _referencing environment_) that these functions can _reference_ in a future point in time.
-### A True Story about Closures
-The other day, as I was pair programming with my coworker, we ran into an issue which led us to a deeper understanding of how Javascript handles closures . The task at hand was a mini library for managing analytics events for a _HTML5_ mobile app. Each analytics event is triggered by a DOM event (e.g. _click_) and can have 1 or more _attributes_ associated with it. For example, these are the attributes associated with the _modelTap_ event:<pre class="brush: js">
-    {
-        'navigationCategory' : 'popular',
-        'model' : 'myModel'
-    }
-</pre><p>Simple stuff. The tricky part is that, different <em>events</em> may contain different type of <em>attributes</em>, and these <em>attributes</em> need to be populated from different parts of the DOM. We solved this is by creating an <em>array</em> of analytic configuration objects, containing the following properties:</p><ul><li><strong><em>eventName</em></strong>, a <em>String</em>,</li><li>a CSS <strong><em>selector</em></strong>, a <em>String</em>,</li><li>and a <strong><em>getAttributes</em></strong> <em>Function</em> that returns a Javascript object with the attributes for this event.</li></ul><p>For example:</p><pre class="brush: js">
-    var analyticConfigs = [
-        {
-            eventName: 'modelTap',
-            selector: 'li.model',
-            getAttributes: function(context) {
-                var model = $(context).text();
-                var navigationCategory = $(context).find('#category').text();
-                return {model: model, navigationCategory: navigationCategory};
-            }
-        },
-        {
-            eventName: 'navTap',
-            selector: 'li.navigation_tab',
-            getAttributes: function(context) {
-                var tabName = $(context).text();
-                return {tabName: tabName};
-            }
-        }
-    ];
-</pre><p>The idea is to iterate through the configuration array and for each config object attach a <em>&lsquo;click&rsquo;</em> event handler to the elements resolved by the <em>selector</em> property. Within the <em>click</em> handler, we would call the function that&rsquo;s responsible for resolving the <em>event name</em> and<br><em>attributes</em> object and send this info through the analytics API.</p><p>To put it in code:</p><pre class="brush: js">
-    for (var i = 0; i < analyticConfigs.length; i++) {
-        var config = analyticConfigs[i];
-        $('body').on('click', config.selector, function() {
-            sendAnalyticsEvent(this, config);
-        })
-    }
+];
+</code></pre><p>The idea is to iterate through the configuration array and for each config object attach a <em>&lsquo;click&rsquo;</em> event handler to the elements resolved by the <em>selector</em> property. Within the <em>click</em> handler, we would call the function that&rsquo;s responsible for resolving the <em>event name</em> and<br><em>attributes</em> object and send this info through the analytics API.</p><p>To put it in code:</p><pre><code class=language-js>for (var i = 0; i &lt; analyticConfigs.length; i++) {
+     var config = analyticConfigs[i];
+     $('body').on('click', config.selector, function() {
+          sendAnalyticsEvent(this, config);
+     })
+}
 
-    function sendAnalyticsEvent(context, config) {
-        var eventName = config.eventName;
-        var attributes = config.getAttributes(context);
+function sendAnalyticsEvent(context, config) {
+     var eventName = config.eventName;
+     var attributes = config.getAttributes(context);
 
-                // Omitting API call to analytics code for clarity.
-        console.log("Sending analytic event: " + eventName + "; with attributes " + JSON.stringify(attributes));
-    }
-</pre><p>This should work fine, right ? Turns out it doesn&rsquo;t. After doing a couple of clicks to the different elements, the output of this is:</p><pre><code> &gt; Sending analytic event: navTap; with attributes {&quot;tabName&quot;:&quot;Super Tab&quot;}
+     // Omitting API call to analytics code for clarity.
+     console.log(&quot;Sending analytic event: &quot; + eventName + &quot;; with attributes &quot; + JSON.stringify(attributes));
+}
+</code></pre><p>This should work fine, right ? Turns out it doesn&rsquo;t. After doing a couple of clicks to the different elements, the output of this is:</p><pre><code> &gt; Sending analytic event: navTap; with attributes {&quot;tabName&quot;:&quot;Super Tab&quot;}
  &gt; Sending analytic event: navTap; with attributes {&quot;tabName&quot;:&quot;Super Tab&quot;}
-</code></pre><p>Can you guess where the problem is ?</p><p>The problem lies in the <em>for</em> loop. Turns out, Javascript creates new scopes within <em>functions</em> (i.e. private variables). However, it does not do so within blocks (i.e. <em>for</em> and <em>while</em> loops). This means that in the example above, there&rsquo;s a single <em>config</em> var created for the entire duration of the loop (and beyond!), and that every <em>closure</em> created within the loop, will reference the same <em>config</em> object.</p><p>To make this clearer, we can print the contents of the <em>config</em> object outside the loop:</p><pre class="brush: js">
-     for (var i = 0; i < analyticConfigs.length; i++) {
-          var config = analyticConfigs[i];
-          $('body').on('click', config.selector, function() {
-               sendAnalyticsEvent(this, config);
-          })
-     }  
-     console.log("Config: " + config.eventName);
-</pre><p>The code above prints:</p><pre><code> &gt; Config: navTap
-</code></pre><p>Sick, right ?</p><h3 id=so-how-to-solve-this>So, how to solve this?</h3><p>The key is to create a new scope for the <em>config</em> variable. As I mentioned previously, Javascript creates a new scope each time a function is created, so we can leverage this in the following way:</p><pre class="brush: js">
-     for (var i = 0; i < analyticConfigs.length; i++) {
-          var config = analyticConfigs[i];
-          $('body').on('click', config.selector, function(cfg) {
-                return function() { sendAnalyticsEvent(this, cfg) };
-          }(config));
-     }  
-</pre><p>What we&rsquo;re doing here is wrapping our function within an anonymous function that receives a <em>cfg</em> parameter, effectively creating a new scope (where the <em>cfg</em> var lives in). We immediately call this function passing in our <em>config</em> variable.</p><p>The output of this code is now:</p><pre><code> &gt; Sending analytic event: modelTap; with attributes {&quot;model&quot;:&quot; Super Model &quot;,&quot;navigationCategory&quot;:&quot;&quot;}
+</code></pre><p>Can you guess where the problem is ?</p><p>The problem lies in the <em>for</em> loop. Turns out, Javascript creates new scopes within <em>functions</em> (i.e. private variables). However, it does not do so within blocks (i.e. <em>for</em> and <em>while</em> loops). This means that in the example above, there&rsquo;s a single <em>config</em> var created for the entire duration of the loop (and beyond!), and that every <em>closure</em> created within the loop, will reference the same <em>config</em> object.</p><p>To make this clearer, we can print the contents of the <em>config</em> object outside the loop:</p><pre><code class=language-js>for (var i = 0; i &lt; analyticConfigs.length; i++) {
+     var config = analyticConfigs[i];
+     $('body').on('click', config.selector, function() {
+          sendAnalyticsEvent(this, config);
+     })
+}  
+console.log(&quot;Config: &quot; + config.eventName);
+</code></pre><p>The code above prints:</p><pre><code> &gt; Config: navTap
+</code></pre><p>Sick, right ?</p><h3 id=so-how-to-solve-this>So, how to solve this?</h3><p>The key is to create a new scope for the <em>config</em> variable. As I mentioned previously, Javascript creates a new scope each time a function is created, so we can leverage this in the following way:</p><pre><code class=language-js>for (var i = 0; i &lt; analyticConfigs.length; i++) {
+     var config = analyticConfigs[i];
+     $('body').on('click', config.selector, function(cfg) {
+               return function() { sendAnalyticsEvent(this, cfg) };
+     }(config));
+}  
+</code></pre><p>What we&rsquo;re doing here is wrapping our function within an anonymous function that receives a <em>cfg</em> parameter, effectively creating a new scope (where the <em>cfg</em> var lives in). We immediately call this function passing in our <em>config</em> variable.</p><p>The output of this code is now:</p><pre><code> &gt; Sending analytic event: modelTap; with attributes {&quot;model&quot;:&quot; Super Model &quot;,&quot;navigationCategory&quot;:&quot;&quot;}
  &gt; Sending analytic event: navTap; with attributes {&quot;tabName&quot;:&quot; Super Tab &quot;}  
-</code></pre><p>Interesting, right ?</p><h3 id=conclusion>Conclusion</h3><p>Lots of languages have closures: obviously functional languages such as Scala, Haskell, Clojure, etc, but also Object Oriented languages such as Ruby, Python, and C#. Even in Java you can achieve similar functionality with anonymous inner classes. In all of these languages though, new scopes are created within blocks such as <em>for</em> and <em>while</em> loops.</p><p>Take as an example the following Ruby code:</p><pre class="brush: ruby">
-     closure_array = []
-     numbers = %w{one two three}
+</code></pre><p>Interesting, right ?</p><h3 id=conclusion>Conclusion</h3><p>Lots of languages have closures: obviously functional languages such as Scala, Haskell, Clojure, etc, but also Object Oriented languages such as Ruby, Python, and C#. Even in Java you can achieve similar functionality with anonymous inner classes. In all of these languages though, new scopes are created within blocks such as <em>for</em> and <em>while</em> loops.</p><p>Take as an example the following Ruby code:</p><pre><code class=language-ruby>closure_array = []
+numbers = %w{one two three}
 
-     numbers.each do |n|
-       closure_array << ->{puts n}
-     end
+numbers.each do |n|
+     closure_array &lt;&lt; -&gt;{puts n}
+end
 
-     closure_array.each do |c|
-       c.call
-     end
-</pre><p>The output of the above code is:</p><pre><code> &gt; one
+closure_array.each do |c|
+     c.call
+end
+</code></pre><p>The output of the above code is:</p><pre><code> &gt; one
  &gt; two
  &gt; three
-</code></pre><p>As you can see, things work as expected, and there&rsquo;s no need to create a new scope or anything like that.</p><p>Javascript is a very powerful language and it&rsquo;s far from perfect. In my opinion, this is a flaw of the language itself. Of course, you can argue that it&rsquo;s just a matter of understanding the language, but still you have to accept that it&rsquo;s counter intuitive. This is just one example of why languages such as <em>CoffeeScript</em> have emerged.</p><p>All in all, I really enjoy programming in Javascript, and the more I understand it, the more enjoyable it becomes.</p><p>As Douglas Crockford put it, <em>Javascript</em> is <a href=http://www.crockford.com/javascript/javascript.html>the worlds most misunderstood language.</a></p></div></article><hr><div class=post-info><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83.0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://www.danvalencia.dev/tags/javascript>javascript</a></span></p></div></main></div><footer class=footer><div class=footer__inner><div class=footer__content><span>&copy; 2019</span>
+</code></pre><p>As you can see, things work as expected, and there&rsquo;s no need to create a new scope or anything like that.</p><p>Javascript is a very powerful language and it&rsquo;s far from perfect. In my opinion, this is a flaw of the language itself. Of course, you can argue that it&rsquo;s just a matter of understanding the language, but still you have to accept that it&rsquo;s counter intuitive. This is just one example of why languages such as <em>CoffeeScript</em> have emerged.</p><p>All in all, I really enjoy programming in Javascript, and the more I understand it, the more enjoyable it becomes.</p><p>As Douglas Crockford put it, <em>Javascript</em> is <a href=http://www.crockford.com/javascript/javascript.html>the worlds most misunderstood language.</a></p></div></article><hr><div class=post-info><p><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83.0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7" y2="7"/></svg><span class=tag><a href=https://www.danvalencia.dev/tags/javascript>javascript</a></span></p></div></main></div><footer class=footer><div class=footer__inner><div class=footer__content><span>&copy; 2020</span>
 <span><a href=https://www.danvalencia.dev/>Daniel Valencia Backhoff</a></span>
 <span></span><span><a href=https://www.danvalencia.dev/posts/index.xml target=_blank title=rss><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rss"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg></a></span></div></div><div class=footer__inner><div class=footer__content><span>Made with &#10084; by <a href=https://github.com/danvalencia>danvalencia</a></span></div></div></footer></div><script type=text/javascript src=/bundle.min.2d5469329143160ae2456a69c3c76dc2d0a3b212b46afe291a51bd68650ed6f8697e001dab54f1c272c77ce08092a8c55e5bb4314e0ee334aab4b927ec896638.js integrity="sha512-LVRpMpFDFgriRWppw8dtwtCjshK0av4pGlG9aGUO1vhpfgAdq1TxwnLHfOCAkqjFXlu0MU4O4zSqtLkn7IlmOA=="></script></body></html>
