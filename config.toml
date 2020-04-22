@@ -68,9 +68,9 @@ theme = "hello-friend-ng"
     url        = "/articles"
 
   [[menu.main]]
-    identifier = "recipes"
-    name       = "Recipes"
-    url        = "/recipes"
+    identifier = "talks"
+    name       = "Talks"
+    url        = "/talks"
 
   [[menu.main]]
     identifier = "about"
