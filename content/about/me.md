@@ -1,7 +1,7 @@
 +++
 title = "About me"
 +++
-I'm an experienced software developer from [Ensenada, México](http://en.wikipedia.org/wiki/Ensenada,_Baja_California), currently working as a Senior Software Engineer at HELIX RE, in San Francisco, California. 
+I'm an experienced software developer from [Ensenada, México](http://en.wikipedia.org/wiki/Ensenada,_Baja_California), currently working as a Director of Engineering at HELIX RE, in San Francisco, California. 
 
 I'd say curiosity is one of my biggest strengths, and that has helped me get involved in the entire software development stack: from frontend, backend, and mobile app development to infrastructure engineering, QA, and performance testing. I'm a technologist at heart who loves solving hard problems; I'm a generalist who believes in using the right tool for the job. Building things is what I enjoy the most.
 
