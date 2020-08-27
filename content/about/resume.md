@@ -4,16 +4,16 @@
 
 ### Professional Summary  
 
-I have over 10 years of experience as a software engineer and technical lead across a diverse set of projects that span from greenfield development to big complex integration projects with startups and enterprises in the fields of eCommerce, media, real estate, and AEC.
+I have over 14 years of experience as a software engineer and technical lead across a diverse set of projects that span from greenfield development to big complex integration projects with startups and enterprises in the fields of eCommerce, media, real estate, and AEC.
 
 I am a generalist that enjoys a good challenge. My strength lies on my breadth of experience: backend development, UI, mobile app development, infrastructure engineering, QA, performance/load testing, and people management. I have strong expertise in Java based web application development and I'm also proficient in other languages and platforms such as Javascript, Go, Ruby on Rails, Python and iOS. 
 
 I treat software development as a craft, and I like my code well tested. I know that test coverage is important, but 100% coverage is impractical. I've done TDD and pair programming enough to understand its value, but I'm also pragmatic and understand that prototyping sometimes requires different approaches.  
 
-Collaboration is important to me, and I love bouncing ideas with fellow teammates. I enjoy mentoring fellow engineers and have held people management and leadership positions.
+Collaboration is important to me, and I love bouncing ideas with fellow teammates. I enjoy mentoring fellow engineers (and also love being mentored!) and have held people management and leadership positions.
 
 ### HELIX RE Inc, San Francisco, CA (February 2018 - current)
-#### *Senior Software Engineer* 
+#### *Director of Engineering* 
 
 As a founding engineer for HELIX, I've had the opportunity to design and build our cloud platform from scratch. On my day to day at HELIX, I work closely with product, UX, frontend, backend and infrastructure engineers to build the features that comprise the HELIX platform. Some of my main accomplishments include:
 
