@@ -19,7 +19,7 @@ Collaboration is important to me, and I love bouncing ideas with fellow teammate
 As a Director of Engineering I have a broad range of responsibilities that span people management, software development, project management and administrative work. Some of the things I do on a day to day basis include:
 
 - Work closely with our CEO to make the vision of HELIX a reality.
-- Project Management for the engineering team, using scrum methodology and Jira.
+- Project Management for the engineering team, using scrum methodology.
 - Release Management, QA and production troubleshooting.
 - Manage team of 7 engineers distributed globally across US, Mexico and Eastern Europe.
 - Collaborate with our engineers in the architecture and implementation of new features for the HELIX platform.
