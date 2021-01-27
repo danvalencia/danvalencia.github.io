@@ -8,7 +8,7 @@ I am a generalist that enjoys a good challenge. My strength lies on my breadth o
 
 I treat software development as a craft, and I like my code well tested. I know that test coverage is important, but 100% coverage is impractical. I've done TDD and pair programming enough to understand its value, but I'm also pragmatic and understand that prototyping sometimes requires different approaches.
 
-Collaboration is important to me, and I love bouncing ideas with fellow teammates. I enjoy mentoring fellow engineers and have held people management and leadership positions.
+Collaboration is important to me, and I love bouncing ideas with fellow teammates. I enjoy mentoring fellow engineers (and also love being mentored!) and have held people management and leadership positions.
 
 ### HELIX RE Inc, San Francisco, CA (February 2018 - current)
 
